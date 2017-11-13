@@ -175,16 +175,6 @@
     }
 
     function get_user() {
-        /* $.ajax({
-             url: "http://192.168.0.15:5000/api/v1",
-             type: 'GET',
-             dataType: 'json',
-             success: function(data) {
-                 console.log(data)
-                 get_result(data[0].usuario);
-                 console.log("AJA RETORNA " + data[0].usuario);
-             }
-         });*/
         $.get("http://192.168.0.15:5000/api/v1", function(data, status) {
             print = data[0].usuario;
             //get_result(result);
