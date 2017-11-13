@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        #hero {
+            background: #8583de;
+            width: 40px;
+            height: 40px;
+            position: absolute;
+        }
+
+        #tank {
+            background: #ffff4f;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+        }
+
+        #background {
+            background: #E00001;
+            position: absolute;
+            width: 460px;
+            height: 460px;
+            left: 0px;
+            top: 0px;
+            border-style: solid;
+            border-color: black;
+            border-width: 20px;
+        }
+
+        #laser {
+            background: #ffffff;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>BattleTank</title>
+</head>
+
+<body>
+    <div id="background"></div>
+    <div id="hero"></div>
+    <div id="laser"></div>
+    <!--    <div id="tank"></div>-->
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    var LEFT_KEY = 37;
+    var UP_KEY = 38;
+    var RIGHT_KEY = 39;
+    var DOWN_KEY = 40;
+    var SPACE_KEY = 32;
+    var HERO_MOVEMENT = 20;
+
+    var lastLoopRun = 0;
+
+    var controller = new Object();
+
+    function createSprite(element, x, y, w, h) {
+        var result = new Object();
+        result.element = element;
+        result.x = x;
+        result.y = y;
+        result.w = w;
+        result.h = h;
+        return result;
+    }
+
+    function toggleKey(keyCode, isPressed) {
+        if (keyCode == LEFT_KEY) {
+            controller.left = isPressed;
+        }
+        if (keyCode == RIGHT_KEY) {
+            controller.right = isPressed;
+        }
+        if (keyCode == UP_KEY) {
+            controller.up = isPressed;
+        }
+        if (keyCode == DOWN_KEY) {
+            controller.down = isPressed;
+        }
+        if (keyCode == SPACE_KEY) {
+            controller.space = isPressed;
+        }
+        if (keyCode == "ric") {
+            controller.up = isPressed;
+        }
+    }
+
+    function ensureBonds(sprite) {
+        if (sprite.x <= 20) {
+            sprite.x = 20;
+        }
+        if (sprite.y <= 20) {
+            sprite.y = 20;
+        }
+        if (sprite.x + sprite.w > 480) {
+            sprite.x = 480 - sprite.w;
+        }
+        if (sprite.y + sprite.h > 480) {
+            sprite.y = 480 - sprite.h;
+        }
+    }
+
+    function setPosition(sprite) { //permitirá buscar posición del duende.
+        var e = document.getElementById(sprite.element); //busca el elemento
+        e.style.left = sprite.x + 'px'; //asigna las coordenadas donde estará el sprite
+        e.style.top = sprite.y + 'px'; //asigna las coordenadas donde estará el sprite
+    }
+
+    function handleControlsHero() {
+        if (controller.up) {
+            hero.y -= HERO_MOVEMENT;
+            console.log("X = " + hero.x + " Y = " + hero.y);
+        }
+        if (controller.down) {
+            hero.y += HERO_MOVEMENT;
+            console.log("X = " + hero.x + " Y = " + hero.y);
+        }
+        if (controller.left) {
+            hero.x -= HERO_MOVEMENT;
+            console.log("X = " + hero.x + " Y = " + hero.y);
+        }
+        if (controller.right) {
+            hero.x += HERO_MOVEMENT;
+            console.log("X = " + hero.x + " Y = " + hero.y);
+        }
+        if (controller.space && laser.y <= -120) {
+            laser.x = hero.x + 20;
+            laser.y = hero.y + laser.h;
+            console.log("X = " + hero.x + " Y = " + hero.y);
+        }
+        ensureBonds(hero);
+    }
+
+    /*function handleControlsTank() {
+    TODO = ACTUALIZAAAAAAAAAAAAAAAA CON EL OTROOOOOOOOOOOOOOOOOOOOOOO
+        if (controller.up) {
+            tank.y -= HERO_MOVEMENT;
+            console.log("X = " + tank.x + " Y = " + tank.y);
+        }
+        if (controller.down) {
+            tank.y += HERO_MOVEMENT;
+            console.log("X = " + tank.x + " Y = " + tank.y);
+        }
+        if (controller.left) {
+            tank.x -= HERO_MOVEMENT;
+            console.log("X = " + tank.x + " Y = " + tank.y);
+        }
+        if (controller.right) {
+            tank.x += HERO_MOVEMENT;
+            console.log("X = " + tank.x + " Y = " + tank.y);
+        }
+        ensureBonds(tank);
+    }*/
+
+    function showSprites() { //actualizar hero
+        setPosition(hero);
+        setPosition(laser);
+        //setPosition(tank);
+    }
+
+    function handleControlsFalse(random) {
+        toggleKey(random, false);
+        handleControlsHero();
+        //handleControlsTank();
+        showSprites();
+    }
+
+    function updatePosition() {
+        laser.y -= 22;
+    }
+
+    function get_user() {
+        /* $.ajax({
+             url: "http://192.168.0.15:5000/api/v1",
+             type: 'GET',
+             dataType: 'json',
+             success: function(data) {
+                 console.log(data)
+                 get_result(data[0].usuario);
+                 console.log("AJA RETORNA " + data[0].usuario);
+             }
+         });*/
+        $.get("http://192.168.0.15:5000/api/v1", function(data, status) {
+            print = data[0].usuario;
+            //get_result(result);
+        });
+    }
+    var print = "";
+
+    function get_result(data) {
+        print = data;
+        return print;
+    }
+
+    function loop() {
+        if (new Date().getTime() - lastLoopRun > 40) {
+            var random = moveRandom(print);
+            updatePosition();
+            handleControlsHero();
+            //handleControlsTank();
+            showSprites();
+            handleControlsFalse(random);
+            get_user();
+            //console.log("GRACIAS DIOS " + print);
+            lastLoopRun = new Date().getTime();
+        }
+        setTimeout('loop();', 20);
+    }
+
+    function moveRandom(ejemplo) {
+        //        var loop = Math.floor(Math.random() * 5);
+        //        if (loop == 0) {
+        //            var keyCode = 37;
+        //            toggleKey(keyCode, true);
+        //            //toggleKey(keyCode, false);
+        //            return keyCode;
+        //        }
+        //        if (loop == 1) {
+        //            var keyCode = 38;
+        //            toggleKey(keyCode, true);
+        //            //toggleKey(keyCode, false);
+        //            return keyCode;
+        //        }
+        //        if (loop == 2) {
+        //            var keyCode = 39;
+        //            toggleKey(keyCode, true);
+        //            //toggleKey(keyCode, false);
+        //            return keyCode;
+        //        }
+        //        if (loop == 3) {
+        //            var keyCode = 40;
+        //            toggleKey(keyCode, true);
+        //            return keyCode;
+        //        }
+        //        if (loop == 4) {
+        //            var keyCode = 32;
+        //            toggleKey(keyCode, true);
+        //            return keyCode;
+        //        }
+        if (ejemplo == "ric") {
+            toggleKey(ejemplo, true);
+        }
+    }
+   /* document.onkeydown = function(evt) { //movimiento
+        toggleKey(evt.keyCode, true);
+    };
+
+    document.onkeyup = function(evt) { //movimiento
+        toggleKey(evt.keyCode, false);
+    };*/
+
+
+    var hero = createSprite('hero', 250, 460, 40, 40);
+    var laser = createSprite('laser', 0, -120, 5, 5);
+    //var tank = createSprite('tank', 250, 160, 40, 40);
+    loop();
+</script>
+
+</html>
