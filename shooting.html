@@ -35,7 +35,6 @@
             height: 10px;
             position: absolute;
         }
-
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -319,9 +318,6 @@
         }
     }
 
-    function shotDown() {
-    }
-
     function decideDirectionShot() { //
         if (countLifeTank2 != 0) {
             if (directionShotTank1 == "UP") {
@@ -330,7 +326,7 @@
                 console.log("GRACAS MI SEÑOR!");
                 initBomb();
                 countLifeTank2 = 0;
-            } else if (directionShotTank1 == "DOWN"){
+            } else if (directionShotTank1 == "DOWN") {
                 console.log("ESTA EN SHOOTING IT DOWN");
                 bomb.y += 22;
                 console.log("GRACAS MI SEÑOR!");
@@ -343,7 +339,7 @@
         if (bomb.y <= 20) {
             bomb.x = tank1.x + 20;
             bomb.y = tank1.y + bomb.h;
-        } else if (bomb.y > 480){
+        } else if (bomb.y > 480) {
             bomb.x = tank1.x + 20;
             bomb.y = tank1.y + bomb.h;
         }
@@ -365,12 +361,26 @@
             lastLoopRun = new Date().getTime();
             //console.log("..");
             //console.log(countLifeTank2);
+            moveTank2();
         }
         setTimeout('loop();', 100);
     }
 
-    function updatePosition3() {
-        bomb.x += 22;
+    function moveTank2() {
+        var random = Math.floor(Math.random() * 4);
+        if (random == 0) {
+            tank2.x += 10;
+            ensureBorders(tank2);
+        } else if (random == 1) {
+            tank2.x += 10;
+            ensureBorders(tank2);
+        } else if (random == 2) {
+            tank2.x += 10;
+            ensureBorders(tank2);
+        } else if (random == 3) {
+            tank2.x += 10;
+            ensureBorders(tank2);
+        }
     }
 
     /*document.onkeydown = function(evt) { //movimiento
@@ -386,7 +396,6 @@
     var bomb = createObject('bomb', 0, -120, 5, 5);
     //var tank = createObject('tank', 250, 160, 40, 40);
     loop();
-
 </script>
 
 </html>
