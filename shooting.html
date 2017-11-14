@@ -3,7 +3,7 @@
 
 <head>
     <style>
-        #hero {
+        #tank1 {
             background: #8583de;
             width: 40px;
             height: 40px;
@@ -49,7 +49,7 @@
 
 <body>
     <div id="background"></div>
-    <div id="hero"></div>
+    <div id="tank1"></div>
     <div id="tank_example"></div>
     <div id="laser"></div>
     <!--    <div id="tank"></div>-->
@@ -61,15 +61,16 @@
     var RIGHT_KEY = 39;
     var DOWN_KEY = 40;
     var SPACE_KEY = 32;
-    var HERO_MOVEMENT = 20;
+    var MOVEMENT = 20;
 
     var lastLoopRun = 0;
 
     var controller = new Object();
-    var xPositionTankExample = "";
-    var yPositionTankExample = "";
 
-    function createSprite(element, x, y, w, h) {
+    var xPositionTank2 = "";
+    var yPositionTank2 = "";
+
+    function createObject(element, x, y, w, h) {
         var result = new Object();
         result.element = element;
         result.x = x;
@@ -100,7 +101,7 @@
         }
     }
 
-    function ensureBonds(sprite) {
+    function ensureBorders(sprite) {
         if (sprite.x <= 20) {
             sprite.x = 20;
         }
@@ -121,33 +122,33 @@
         e.style.top = sprite.y + 'px'; //asigna las coordenadas donde estará el sprite
     }
 
-    function handleControlsHero() {
+    function handleControlsTank1() {
         if (controller.up) {
-            hero.y -= HERO_MOVEMENT;
-            console.log("X = " + hero.x + " Y = " + hero.y);
+            tank1.y -= MOVEMENT;
+            console.log("X = " + tank1.x + " Y = " + tank1.y);
         }
         if (controller.down) {
-            hero.y += HERO_MOVEMENT;
-            console.log("X = " + hero.x + " Y = " + hero.y);
+            tank1.y += MOVEMENT;
+            console.log("X = " + tank1.x + " Y = " + tank1.y);
         }
         if (controller.left) {
-            hero.x -= HERO_MOVEMENT;
-            console.log("X = " + hero.x + " Y = " + hero.y);
+            tank1.x -= MOVEMENT;
+            console.log("X = " + tank1.x + " Y = " + tank1.y);
         }
         if (controller.right) {
-            hero.x += HERO_MOVEMENT;
-            console.log("X = " + hero.x + " Y = " + hero.y);
+            tank1.x += MOVEMENT;
+            console.log("X = " + tank1.x + " Y = " + tank1.y);
         }
         if (controller.space && laser.y <= -120) {
-            laser.x = hero.x + 20;
-            laser.y = hero.y + laser.h;
-            console.log("X = " + hero.x + " Y = " + hero.y);
+            laser.x = tank1.x + 20;
+            laser.y = tank1.y + laser.h;
+            console.log("X = " + tank1.x + " Y = " + tank1.y);
         }
-        ensureBonds(hero);
+        ensureBorders(tank1);
     }
 
-    function showSprites() { //actualizar hero
-        setPosition(hero);
+    function showSprites() { //actualizar tank1
+        setPosition(tank1);
         setPosition(laser);
         setPosition(tank_example);
         //setPosition(tank);
@@ -155,7 +156,7 @@
 
     function handleControlsFalse(random) {
         toggleKey(random, false);
-        handleControlsHero();
+        handleControlsTank1();
         //handleControlsTank();
         showSprites();
     }
@@ -163,11 +164,12 @@
     function updatePosition() { //
         laser.y -= 22;
     }
-
+//------------------------------------------------------------------------------------------------------//
+//POST Y GET DEL TANK2
     function postPositionTank2() {
         $.ajax({
             type: "POST",
-            url: "http://192.168.0.15:5000/api/v1/users/tank1",
+            url: "http://192.168.0.15:5000/api/v1/users/tank2",
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({
                 x: tank_example.x,
@@ -181,35 +183,35 @@
     }
 
     function getPositionTank2() {
-        $.get("http://192.168.0.15:5000/api/v1/users/tank1", function(data, status) {
-            xPositionTankExample = data[0].x;
-            yPositionTankExample = data[0].y
-            //            console.log("GET X = " + xPositionTankExample + " Y = " + yPositionTankExample);
+        $.get("http://192.168.0.15:5000/api/v1/users/tank2", function(data, status) {
+            xPositionTank2 = data[0].x;
+            yPositionTank2 = data[0].y
+            //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
         });
     }
-
+//------------------------------------------------------------------------------------------------------//
     function brainMovesTank1() {
-//        console.log("ANTES X = " + hero.x + " Y = " + hero.y);
-        if (hero.x > xPositionTankExample && hero.y != yPositionTankExample) {
-            hero.x -= hero.x - xPositionTankExample;
-//            console.log("AHORA X = " + hero.x + " Y = " + hero.y);
+//        console.log("ANTES X = " + tank1.x + " Y = " + tank1.y);
+        if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
+            tank1.x -= tank1.x - xPositionTank2;
+//            console.log("AHORA X = " + tank1.x + " Y = " + tank1.y);
             showSprites();
             //controller.left = true;
         }
-        if (hero.x < xPositionTankExample && hero.y != yPositionTankExample) {
-            hero.x += xPositionTankExample - hero.x;
+        if (tank1.x < xPositionTank2 && tank1.y != yPositionTank2) {
+            tank1.x += xPositionTank2 - tank1.x;
             showSprites();
             //            console.log("ERES MENOR EN X");
             //controller.right = true;
         }
-        if (hero.y > yPositionTankExample && hero.x != xPositionTankExample) {
-            hero.y -= hero.y - yPositionTankExample;
+        if (tank1.y > yPositionTank2 && tank1.x != xPositionTank2) {
+            tank1.y -= tank1.y - yPositionTank2;
             showSprites();
             //          console.log("ERES MAYOR EN Y");
             //controller.up = true;
         }
-        if (hero.y < yPositionTankExample && hero.x != xPositionTankExample) {
-            hero.y += yPositionTankExample - hero.y;
+        if (tank1.y < yPositionTank2 && tank1.x != xPositionTank2) {
+            tank1.y += yPositionTank2 - tank1.y;
             showSprites();
             //        console.log("ERES MENOR EN Y");
         }
@@ -217,18 +219,16 @@
 
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) {
-            postPosition2();  //envia el valor actualizado de tank2 y lo envia al servidor.
-            getPosition2();   //recibe el valor del
+            postPositionTank2();  //envia el valor actualizado de tank2 y lo envia al servidor.
+            getPositionTank2();   //recibe el valor del
             brainMovesTank1();
             //var random = moveRandom(print);
             updatePosition();
-            //handleControlsHero();
-            ensureBonds(hero);
+            //handleControlsTank1();
+            ensureBorders(tank1);
             //handleControlsTank();
             showSprites();
-            //handleControlsFalse(random);
-            //get_user();
-            //console.log("GRACIAS DIOS " + print);
+            //handleControlsFalse(random);  //PARA CUANDO NO SE UTILIZA TECLA Y SE HACE EL TRUE, COLOCARLO EN FALSE.
             lastLoopRun = new Date().getTime();
         }
         setTimeout('loop();', 2000);
@@ -247,10 +247,10 @@
     //        toggleKey(evt.keyCode, false);
     //    };
 
-    var hero = createSprite('hero', 250, 460, 40, 40);
-    var tank_example = createSprite('tank_example', 120, 120, 40, 40);
-    var laser = createSprite('laser', 0, -120, 5, 5);
-    //var tank = createSprite('tank', 250, 160, 40, 40);
+    var tank1 = createObject('tank1', 250, 460, 40, 40);
+    var tank_example = createObject('tank_example', 120, 120, 40, 40);
+    var laser = createObject('laser', 0, -120, 5, 5);
+    //var tank = createObject('tank', 250, 160, 40, 40);
     loop();
 </script>
 
