@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>ejemplo</title>
+</head>
+
+<body>
+    <script>
+        var lastLoopRun = 0;
+
+        function postPositionTankExample() {
+            /*$.post("http://192.168.0.15:5000/api/v1/users/tank1", {
+                    x: tank_example.x,
+                    y: tank_example.y
+                },
+                function(data, status) {
+                    console.log(data);
+                });*/
+            /* $.post('http://192.168.0.15:5000/api/v1/users/tank1', {
+                     x: 20,
+                     y: 20
+                 },
+                 function(returnedData) {
+                     console.log(returnedData);
+                 });*/
+            $.ajax({
+                type: "POST",
+                url: "http://192.168.0.15:5000/api/v1",
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({
+                    usuario: "ric"
+                }, null, '\t'),
+                dataType: "json",
+                success: function(data) {
+                    console.log("GRACIAS MI SEÑOR!" + data);
+                }
+            });
+            /* data = {
+                'usuario': 'foobar'
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "http://192.168.0.15:5000/api/v1",
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify(data, null, '\t'),
+                dataType: 'json',
+                success: function(data) {
+                    console.log("GRACIAS MI SEÑOR!");
+                },
+                error: function(response) {
+                    console.log(response);
+                },
+            });*/
+        }
+
+            function loop() {
+                if (new Date().getTime() - lastLoopRun > 40) {
+                    postPositionTankExample();
+                    console.log("i");
+                }
+                setTimeout('loop();', 2000);
+            }
+            loop();
+    </script>
+</body>
+
+</html>
