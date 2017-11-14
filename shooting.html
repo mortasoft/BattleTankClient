@@ -10,17 +10,10 @@
             position: absolute;
         }
 
-        #tank_example {
+        #tank2 {
             background: #A3C9de;
             width: 40px;
             height: 40px;
-            position: absolute;
-        }
-
-        #tank {
-            background: #ffff4f;
-            width: 20px;
-            height: 20px;
             position: absolute;
         }
 
@@ -36,7 +29,7 @@
             border-width: 20px;
         }
 
-        #laser {
+        #bomb {
             background: #ffffff;
             width: 10px;
             height: 10px;
@@ -50,8 +43,8 @@
 <body>
     <div id="background"></div>
     <div id="tank1"></div>
-    <div id="tank_example"></div>
-    <div id="laser"></div>
+    <div id="tank2"></div>
+    <div id="bomb"></div>
     <!--    <div id="tank"></div>-->
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -84,18 +77,23 @@
     function toggleKey(keyCode, isPressed) {
         if (keyCode == LEFT_KEY) {
             controller.left = isPressed;
+            handleControlsTank1();
         }
         if (keyCode == RIGHT_KEY) {
             controller.right = isPressed;
+            handleControlsTank1();
         }
         if (keyCode == UP_KEY) {
             controller.up = isPressed;
+            handleControlsTank1();
         }
         if (keyCode == DOWN_KEY) {
             controller.down = isPressed;
+            handleControlsTank1();
         }
         if (keyCode == SPACE_KEY) {
             controller.space = isPressed;
+            handleControlsTank1();
         }
         if (keyCode == "ric") {
             controller.up = isPressed;
@@ -140,18 +138,18 @@
             tank1.x += MOVEMENT;
             console.log("X = " + tank1.x + " Y = " + tank1.y);
         }
-        if (controller.space && laser.y <= -120) {
-            laser.x = tank1.x + 20;
-            laser.y = tank1.y + laser.h;
-            console.log("X = " + tank1.x + " Y = " + tank1.y);
+        if (controller.space) {
+            bomb.x = tank1.x + 20;
+            bomb.y = tank1.y + bomb.h;
+            console.log("BOMB X = " + bomb.x + " Y = " + bomb.y);
         }
         ensureBorders(tank1);
     }
 
     function showSprites() { //actualizar tank1
         setPosition(tank1);
-        setPosition(laser);
-        setPosition(tank_example);
+        setPosition(bomb);
+        setPosition(tank2);
         //setPosition(tank);
     }
 
@@ -162,9 +160,7 @@
         showSprites();
     }
 
-    function updatePosition() { //
-        laser.y -= 22;
-    }
+
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DEL TANK2
     function postPositionTank2() {
@@ -173,8 +169,8 @@
             url: "http://192.168.0.15:5000/api/v1/users/tank2",
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({
-                x: tank_example.x,
-                y: tank_example.y
+                x: tank2.x,
+                y: tank2.y
             }, null, '\t'),
             dataType: "json",
             success: function(data) {
@@ -186,7 +182,7 @@
     function getPositionTank2() {
         $.get("http://192.168.0.15:5000/api/v1/users/tank2", function(data, status) {
             xPositionTank2 = data[0].x;
-            yPositionTank2 = data[0].y
+            yPositionTank2 = data[0].y;
             //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
         });
     }
@@ -206,64 +202,63 @@
             }
         });
     }
-     function getLifeTank2() {
+
+    function getLifeTank2() {
         $.get("http://192.168.0.15:5000/api/v1/users/tank2/life", function(data, status) {
             countLifeTank2 = data;
             console.log(countLifeTank2);
-            //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
         });
     }
     //------------------------------------------------------------------------------------------------------//
+    function shooting(element, countOfTank) {
+
+    }
 
     function brainMovesTank1() {
-        //        console.log("ANTES X = " + tank1.x + " Y = " + tank1.y);
         if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
             tank1.x -= tank1.x - xPositionTank2;
-            //            console.log("AHORA X = " + tank1.x + " Y = " + tank1.y);
             showSprites();
-            //controller.left = true;
-
+            //shooting(tank1, countLifeTank2, "shootUp");
         }
         if (tank1.x < xPositionTank2 && tank1.y != yPositionTank2) {
             tank1.x += xPositionTank2 - tank1.x;
             showSprites();
-            //            console.log("ERES MENOR EN X");
-            //controller.right = true;
         }
         if (tank1.y > yPositionTank2 && tank1.x != xPositionTank2) {
             tank1.y -= tank1.y - yPositionTank2;
             showSprites();
-            //          console.log("ERES MAYOR EN Y");
-            //controller.up = true;
         }
         if (tank1.y < yPositionTank2 && tank1.x != xPositionTank2) {
             tank1.y += yPositionTank2 - tank1.y;
             showSprites();
-            //        console.log("ERES MENOR EN Y");
         }
     }
 
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
-            //postPositionTank2();                     //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
-            //getPositionTank2();                      //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
+            //postPositionTank2(); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
+            //getPositionTank2(); //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
             //getLifeTank2();
             //brainMovesTank1();
-            //var random = moveRandom(print);
-            updatePosition();
             handleControlsTank1();
-            ensureBorders(tank1);
+            assignBombTank1();
             showSprites();
+            var random = Math.random * 4;
+            console.log("primero");
+            //updatePosition();
+            ensureBorders(tank1);
             //handleControlsFalse(random);  //PARA CUANDO NO SE UTILIZA TECLA Y SE HACE EL TRUE, COLOCARLO EN FALSE.
             lastLoopRun = new Date().getTime();
         }
         setTimeout('loop();', 20);
     }
 
-    function moveRandom(ejemplo) {
-        if (ejemplo == "ric") {
-            toggleKey(ejemplo, true);
-        }
+    function assignBombTank1() {
+        updatePosition();
+    }
+
+    function updatePosition() { //
+        bomb.y -= 22;
     }
     document.onkeydown = function(evt) { //movimiento
         toggleKey(evt.keyCode, true);
@@ -274,8 +269,8 @@
     };
 
     var tank1 = createObject('tank1', 250, 460, 40, 40);
-    var tank_example = createObject('tank_example', 120, 120, 40, 40);
-    var laser = createObject('laser', 0, -120, 5, 5);
+    var tank2 = createObject('tank2', 120, 120, 40, 40);
+    var bomb = createObject('bomb', 0, -120, 5, 5);
     //var tank = createObject('tank', 250, 160, 40, 40);
     loop();
 </script>
