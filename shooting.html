@@ -146,27 +146,6 @@
         ensureBonds(hero);
     }
 
-    /*function handleControlsTank() {
-    TODO = ACTUALIZAAAAAAAAAAAAAAAA CON EL OTROOOOOOOOOOOOOOOOOOOOOOO
-        i   f (controller.up) {
-            tank.y -= HERO_MOVEMENT;
-            console.log("X = " + tank.x + " Y = " + tank.y);
-        }
-        if (controller.down) {
-            tank.y += HERO_MOVEMENT;
-            console.log("X = " + tank.x + " Y = " + tank.y);
-        }
-        if (controller.left) {
-            tank.x -= HERO_MOVEMENT;
-            console.log("X = " + tank.x + " Y = " + tank.y);
-        }
-        if (controller.right) {
-            tank.x += HERO_MOVEMENT;
-            console.log("X = " + tank.x + " Y = " + tank.y);
-        }
-        ensureBonds(tank);
-    }*/
-
     function showSprites() { //actualizar hero
         setPosition(hero);
         setPosition(laser);
@@ -185,7 +164,7 @@
         laser.y -= 22;
     }
 
-    function postPositionTankExample() {
+    function postPositionTank2() {
         $.ajax({
             type: "POST",
             url: "http://192.168.0.15:5000/api/v1/users/tank1",
@@ -201,7 +180,7 @@
         });
     }
 
-    function getPositionTankExample() {
+    function getPositionTank2() {
         $.get("http://192.168.0.15:5000/api/v1/users/tank1", function(data, status) {
             xPositionTankExample = data[0].x;
             yPositionTankExample = data[0].y
@@ -210,10 +189,10 @@
     }
 
     function brainMovesTank1() {
-        console.log("ANTES X = " + hero.x + " Y = " + hero.y);
+//        console.log("ANTES X = " + hero.x + " Y = " + hero.y);
         if (hero.x > xPositionTankExample && hero.y != yPositionTankExample) {
             hero.x -= hero.x - xPositionTankExample;
-            console.log("AHORA X = " + hero.x + " Y = " + hero.y);
+//            console.log("AHORA X = " + hero.x + " Y = " + hero.y);
             showSprites();
             //controller.left = true;
         }
@@ -238,9 +217,9 @@
 
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) {
-            postPositionTankExample();
-            getPositionTankExample();
-            //brainMovesTank1();
+            postPosition2();  //envia el valor actualizado de tank2 y lo envia al servidor.
+            getPosition2();   //recibe el valor del
+            brainMovesTank1();
             //var random = moveRandom(print);
             updatePosition();
             //handleControlsHero();
@@ -258,35 +237,6 @@
     function moveRandom(ejemplo) {
         if (ejemplo == "ric") {
             toggleKey(ejemplo, true);
-            //        var loop = Math.floor(Math.random() * 5);
-            //        if (loop == 0) {
-            //            var keyCode = 37;
-            //            toggleKey(keyCode, true);
-            //            //toggleKey(keyCode, false);
-            //            return keyCode;
-            //        }
-            //        if (loop == 1) {
-            //            var keyCode = 38;
-            //            toggleKey(keyCode, true);
-            //            //toggleKey(keyCode, false);
-            //            return keyCode;
-            //        }
-            //        if (loop == 2) {
-            //            var keyCode = 39;
-            //            toggleKey(keyCode, true);
-            //            //toggleKey(keyCode, false);
-            //            return keyCode;
-            //        }
-            //        if (loop == 3) {
-            //            var keyCode = 40;
-            //            toggleKey(keyCode, true);
-            //            return keyCode;
-            //        }
-            //        if (loop == 4) {
-            //            var keyCode = 32;
-            //            toggleKey(keyCode, true);
-            //            return keyCode;
-            //        }
         }
     }
     //    document.onkeydown = function(evt) { //movimiento
