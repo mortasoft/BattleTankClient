@@ -60,12 +60,20 @@
 
     var controller = new Object();
 
-    var xPositionTank2 = "";
-    var yPositionTank2 = "";
+    var xPositionTank2 = "Waiting";
+    var yPositionTank2 = "Waiting";
     var countLifeTank2 = 0;
 
     var typeShotTank1 = "0";
     var directionShotTank1 = "";
+
+    var postValueTank2InX = "";
+    var postValueTank2InY = "";
+    var getValueTank2InX = "";
+    var getValueTank2InY = "";
+
+    var getValueLifeTank2 = "";
+
     function createObject(element, x, y, w, h) {
         var result = new Object();
         result.element = element;
@@ -167,27 +175,43 @@
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DEL TANK2
     function postPositionTank2() {
-        $.ajax({
-            type: "POST",
-            url: "http://192.168.0.15:5000/api/v1/users/tank2",
-            contentType: 'application/json;charset=UTF-8',
-            data: JSON.stringify({
-                x: tank2.x,
-                y: tank2.y
-            }, null, '\t'),
-            dataType: "json",
-            success: function(data) {
-                //console.log("Posición del tank 2 actualizada");
-            }
-        });
+        if (postValueTank2InX != tank2.x && postValueTank2InY != tank2.y) {
+            $.ajax({
+                type: "POST",
+                url: "http://192.168.0.15:5000/api/v1/users/tank2",
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({
+                    x: tank2.x,
+                    y: tank2.y
+                }, null, '\t'),
+                dataType: "json",
+                success: function(data) {
+                    //console.log("Posición del tank 2 actualizada");
+                }
+            });
+            postValueTank2InX = tank2.x;
+            postValueTank2InY = tank2.y;
+        } else {
+            //console.log("No ha cambiado la posición el Tank2");
+        }
     }
 
     function getPositionTank2() {
-        $.get("http://192.168.0.15:5000/api/v1/users/tank2", function(data, status) {
-            xPositionTank2 = data[0].x;
-            yPositionTank2 = data[0].y;
-            //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
-        });
+        //console.log("GET VALUE T2 X = " + getValueTank2InX + " X POSITION T2 = " + xPositionTank2);
+        if (getValueTank2InX != xPositionTank2 && getValueTank2InY != yPositionTank2) {
+            $.get("http://192.168.0.15:5000/api/v1/users/tank2", function(data, status) {
+                xPositionTank2 = this;
+                xPositionTank2= data[0].x;
+                yPositionTank2 = this;
+                yPositionTank2 = data[0].y;
+                //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
+            });
+            getValueTank2InX = xPositionTank2;
+            getValueTank2InY = yPositionTank2;
+            //console.log("INSIDE GET VALUE T2 X = " + getValueTank2InX + " X POSITION T2 = " + getValueTank2InY);
+        } else {
+            //console.log("GET no ha cambiado la posición el Tank2");
+        }
     }
     //------------------------------------------------------------------------------------------------------//
     //POST AND GET METODOS PARA ENVIAR LA VIDA ACTUALIZADA DEL TANK2 Y PARA RECIBIR CUANTO TIENE.
@@ -207,42 +231,46 @@
     }
 
     function getLifeTank2() {
-        $.get("http://192.168.0.15:5000/api/v1/users/tank2/life", function(data, status) {
-            countLifeTank2 = data;
-            //console.log("LA VIDA DEL TANQUE ES = " + countLifeTank2);
-        });
+            $.get("http://192.168.0.15:5000/api/v1/users/tank2/life", function(data, status) {
+                countLifeTank2 = data;
+                //console.log("LA VIDA DEL TANQUE ES = " + countLifeTank2);
+            });
     }
     //------------------------------------------------------------------------------------------------------//
 
 
     function brainMovesTank1() {
-        if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
-            tank1.x -= tank1.x - xPositionTank2;
-            showSprites();
-            //            console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
-            decideShot("findY", tank1, yPositionTank2, countLifeTank2);
-        }
-        if (tank1.x < xPositionTank2 && tank1.y != yPositionTank2) {
-            tank1.x += xPositionTank2 - tank1.x;
-            showSprites();
-            //          console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
-            decideShot("findY", tank1, yPositionTank2, countLifeTank2);
-        }
-        if (tank1.y > yPositionTank2 && tank1.x != xPositionTank2) {
-            tank1.y -= tank1.y - yPositionTank2;
-            showSprites();
-            //        console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
-            decideShot("findX", tank1, xPositionTank2, countLifeTank2);
-        }
-        if (tank1.y < yPositionTank2 && tank1.x != xPositionTank2) {
-            tank1.y += yPositionTank2 - tank1.y;
-            showSprites();
-            //      console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
-            decideShot("findX", tank1, xPositionTank2, countLifeTank2);
+        if (xPositionTank2 != "Waiting" && yPositionTank2 != "Waiting") {
+            //console.log("x POSITION TANK " + xPositionTank2 + "Y POSITION TANK = " + yPositionTank2);
+            if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
+                tank1.x -= tank1.x - xPositionTank2;
+                showSprites();
+                //            console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
+                decideShot("findY", tank1, yPositionTank2, countLifeTank2);
+            }
+            if (tank1.x < xPositionTank2 && tank1.y != yPositionTank2) {
+                tank1.x += xPositionTank2 - tank1.x;
+                showSprites();
+                //          console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
+                decideShot("findY", tank1, yPositionTank2, countLifeTank2);
+            }
+            if (tank1.y > yPositionTank2 && tank1.x != xPositionTank2) {
+                tank1.y -= tank1.y - yPositionTank2;
+                showSprites();
+                //        console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
+                decideShot("findX", tank1, xPositionTank2, countLifeTank2);
+            }
+            if (tank1.y < yPositionTank2 && tank1.x != xPositionTank2) {
+                tank1.y += yPositionTank2 - tank1.y;
+                showSprites();
+                //      console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
+                decideShot("findX", tank1, xPositionTank2, countLifeTank2);
+            }
         }
     }
 
     function decideShot(angle, element, positionTank, countLifeTank) {
+
         if (countLifeTank != 0) {
             //console.log("DECIDE SHOT TIENE COUNT LIFE TANK = " + countLifeTank);
             if (angle == "findY") {
@@ -260,6 +288,8 @@
                     shoot(element, countLifeTank, "LEFT");
                 }
             }
+        } else {
+            //console.log("no esta entrando");
         }
     }
 
@@ -277,7 +307,7 @@
             } else if (moveShot == "UP") {
                 console.log("Entro en SHOT DE 100 y en UP");
                 directionShotTank1 = "UP";
-                //shotUp();
+                //decideDirectionShot();
                 initBomb();
             }
         } else if (countTank == 50) {
@@ -292,9 +322,9 @@
         bomb.y += 22;
     }
 
-    function shotUp() { //
+    function decideDirectionShot() { //
         if (countLifeTank2 != 0) {
-            if(directionShotTank1 == "UP"){
+            if (directionShotTank1 == "UP") {
                 console.log("ESTA EN SHOT UP INICIADO");
                 bomb.y -= 22;
                 console.log("GRACAS MI SEÑOR!");
@@ -315,17 +345,14 @@
             brainMovesTank1();
             ensureBorders(tank1);
             //handleControlsTank1();
-            //assignBombTank1();
-            //PONG LOS VALORES DE LA BOMBA AQUÍ.//
             showSprites();
-            //ejemplo();
-            shotUp();
+            decideDirectionShot();
             countLifeTank2 = 0;
             //handleControlsFalse(random);  //PARA CUANDO NO SE UTILIZA TECLA Y SE HACE EL TRUE, COLOCARLO EN FALSE.
             lastLoopRun = new Date().getTime();
-            //directionShotTank1 = "";
+            //console.log("..");
         }
-        setTimeout('loop();', 20);
+        setTimeout('loop();', 80);
     }
 
     /*   function ejemplo() {
@@ -370,7 +397,7 @@
     };*/
 
     var tank1 = createObject('tank1', 250, 460, 40, 40);
-    var tank2 = createObject('tank2', 420, 120, 40, 40);
+    var tank2 = createObject('tank2', 120, 120, 40, 40);
     var bomb = createObject('bomb', 0, -120, 5, 5);
     //var tank = createObject('tank', 250, 160, 40, 40);
     loop();
