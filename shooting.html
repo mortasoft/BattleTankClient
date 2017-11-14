@@ -69,6 +69,7 @@
 
     var xPositionTank2 = "";
     var yPositionTank2 = "";
+    var countLifeTank2 = 0;
 
     function createObject(element, x, y, w, h) {
         var result = new Object();
@@ -164,8 +165,8 @@
     function updatePosition() { //
         laser.y -= 22;
     }
-//------------------------------------------------------------------------------------------------------//
-//POST Y GET DEL TANK2
+    //------------------------------------------------------------------------------------------------------//
+    //POST Y GET DEL TANK2
     function postPositionTank2() {
         $.ajax({
             type: "POST",
@@ -177,7 +178,7 @@
             }, null, '\t'),
             dataType: "json",
             success: function(data) {
-                console.log("Posición actualizada");
+                console.log("Posición del tank 2 actualizada");
             }
         });
     }
@@ -189,14 +190,39 @@
             //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
         });
     }
-//------------------------------------------------------------------------------------------------------//
+    //------------------------------------------------------------------------------------------------------//
+    //POST AND GET METODOS PARA ENVIAR LA VIDA ACTUALIZADA DEL TANK2 Y PARA RECIBIR CUANTO TIENE.
+    function postLifeTank2() {
+        $.ajax({
+            type: "POST",
+            url: "http://192.168.0.15:5000/api/v1/users/tank2/life",
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({
+                total_life: countLifeTank2
+            }, null, '\t'),
+            dataType: "json",
+            success: function(data) {
+                console.log("Cantidad de vida del tank2 actualizada");
+            }
+        });
+    }
+     function getLifeTank2() {
+        $.get("http://192.168.0.15:5000/api/v1/users/tank2/life", function(data, status) {
+            countLifeTank2 = data;
+            console.log(countLifeTank2);
+            //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
+        });
+    }
+    //------------------------------------------------------------------------------------------------------//
+
     function brainMovesTank1() {
-//        console.log("ANTES X = " + tank1.x + " Y = " + tank1.y);
+        //        console.log("ANTES X = " + tank1.x + " Y = " + tank1.y);
         if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
             tank1.x -= tank1.x - xPositionTank2;
-//            console.log("AHORA X = " + tank1.x + " Y = " + tank1.y);
+            //            console.log("AHORA X = " + tank1.x + " Y = " + tank1.y);
             showSprites();
             //controller.left = true;
+
         }
         if (tank1.x < xPositionTank2 && tank1.y != yPositionTank2) {
             tank1.x += xPositionTank2 - tank1.x;
@@ -218,20 +244,20 @@
     }
 
     function loop() {
-        if (new Date().getTime() - lastLoopRun > 40) {
-            postPositionTank2();  //envia el valor actualizado de tank2 y lo envia al servidor.
-            getPositionTank2();   //recibe el valor del
-            brainMovesTank1();
+        if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
+            //postPositionTank2();                     //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
+            //getPositionTank2();                      //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
+            //getLifeTank2();
+            //brainMovesTank1();
             //var random = moveRandom(print);
             updatePosition();
-            //handleControlsTank1();
+            handleControlsTank1();
             ensureBorders(tank1);
-            //handleControlsTank();
             showSprites();
             //handleControlsFalse(random);  //PARA CUANDO NO SE UTILIZA TECLA Y SE HACE EL TRUE, COLOCARLO EN FALSE.
             lastLoopRun = new Date().getTime();
         }
-        setTimeout('loop();', 2000);
+        setTimeout('loop();', 20);
     }
 
     function moveRandom(ejemplo) {
@@ -239,13 +265,13 @@
             toggleKey(ejemplo, true);
         }
     }
-    //    document.onkeydown = function(evt) { //movimiento
-    //        toggleKey(evt.keyCode, true);
-    //    };
-    //
-    //    document.onkeyup = function(evt) { //movimiento
-    //        toggleKey(evt.keyCode, false);
-    //    };
+    document.onkeydown = function(evt) { //movimiento
+        toggleKey(evt.keyCode, true);
+    };
+
+    document.onkeyup = function(evt) { //movimiento
+        toggleKey(evt.keyCode, false);
+    };
 
     var tank1 = createObject('tank1', 250, 460, 40, 40);
     var tank_example = createObject('tank_example', 120, 120, 40, 40);
