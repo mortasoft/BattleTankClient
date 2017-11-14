@@ -35,6 +35,7 @@
             height: 10px;
             position: absolute;
         }
+
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -201,7 +202,7 @@
         if (getValueTank2InX != xPositionTank2 && getValueTank2InY != yPositionTank2) {
             $.get("http://192.168.0.15:5000/api/v1/users/tank2", function(data, status) {
                 xPositionTank2 = this;
-                xPositionTank2= data[0].x;
+                xPositionTank2 = data[0].x;
                 yPositionTank2 = this;
                 yPositionTank2 = data[0].y;
                 //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
@@ -231,10 +232,10 @@
     }
 
     function getLifeTank2() {
-            $.get("http://192.168.0.15:5000/api/v1/users/tank2/life", function(data, status) {
-                countLifeTank2 = data;
-                //console.log("LA VIDA DEL TANQUE ES = " + countLifeTank2);
-            });
+        $.get("http://192.168.0.15:5000/api/v1/users/tank2/life", function(data, status) {
+            countLifeTank2 = data;
+            //console.log("LA VIDA DEL TANQUE ES = " + countLifeTank2);
+        });
     }
     //------------------------------------------------------------------------------------------------------//
 
@@ -294,11 +295,11 @@
     }
 
     function shot(element, countTank, moveShot) {
-        console.log("Entro en SHOT");
+        //console.log("Entro en SHOT");
         //console.log("COUNT TANK 2 = " + countTank);
         if (countTank == 100) {
             //typeShotTank1 = 100;
-            console.log("Entro en SHOT de 100");
+            //console.log("Entro en SHOT de 100");
             if (moveShot == "DOWN") {
                 console.log("Entro en SHOT DE 100 y en DOWN");
                 directionShotTank1 = "DOWN";
@@ -308,7 +309,7 @@
                 console.log("Entro en SHOT DE 100 y en UP");
                 directionShotTank1 = "UP";
                 //decideDirectionShot();
-                initBomb();
+                //initBomb();
             }
         } else if (countTank == 50) {
 
@@ -319,22 +320,33 @@
     }
 
     function shotDown() {
-        bomb.y += 22;
     }
 
     function decideDirectionShot() { //
         if (countLifeTank2 != 0) {
             if (directionShotTank1 == "UP") {
-                console.log("ESTA EN SHOT UP INICIADO");
+                console.log("ESTA EN SHOOTING IT UP");
                 bomb.y -= 22;
                 console.log("GRACAS MI SEÑOR!");
+                initBomb();
+                countLifeTank2 = 0;
+            } else if (directionShotTank1 == "DOWN"){
+                console.log("ESTA EN SHOOTING IT DOWN");
+                bomb.y += 22;
+                console.log("GRACAS MI SEÑOR!");
+                initBomb();
             }
         }
     }
 
     function initBomb() {
-        bomb.x = tank1.x + 20;
-        bomb.y = tank1.y + bomb.h;
+        if (bomb.y <= 20) {
+            bomb.x = tank1.x + 20;
+            bomb.y = tank1.y + bomb.h;
+        } else if (bomb.y > 480){
+            bomb.x = tank1.x + 20;
+            bomb.y = tank1.y + bomb.h;
+        }
     }
 
     function loop() {
@@ -347,12 +359,14 @@
             //handleControlsTank1();
             showSprites();
             decideDirectionShot();
-            countLifeTank2 = 0;
+            //initBomb();
+            //countLifeTank2 = 0;
             //handleControlsFalse(random);  //PARA CUANDO NO SE UTILIZA TECLA Y SE HACE EL TRUE, COLOCARLO EN FALSE.
             lastLoopRun = new Date().getTime();
             //console.log("..");
+            //console.log(countLifeTank2);
         }
-        setTimeout('loop();', 80);
+        setTimeout('loop();', 100);
     }
 
     /*   function ejemplo() {
@@ -383,11 +397,6 @@
         bomb.x += 22;
     }
 
-    function assignBombTank1() {
-        updatePosition();
-    }
-
-
     /*document.onkeydown = function(evt) { //movimiento
         toggleKey(evt.keyCode, true);
     };
@@ -397,10 +406,11 @@
     };*/
 
     var tank1 = createObject('tank1', 250, 460, 40, 40);
-    var tank2 = createObject('tank2', 120, 120, 40, 40);
+    var tank2 = createObject('tank2', 190, 120, 40, 40);
     var bomb = createObject('bomb', 0, -120, 5, 5);
     //var tank = createObject('tank', 250, 160, 40, 40);
     loop();
+
 </script>
 
 </html>
