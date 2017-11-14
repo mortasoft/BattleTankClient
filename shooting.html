@@ -74,7 +74,7 @@
         return result;
     }
 
-    function toggleKey(keyCode, isPressed) {
+    /*function toggleKey(keyCode, isPressed) {
         if (keyCode == LEFT_KEY) {
             controller.left = isPressed;
             handleControlsTank1();
@@ -98,7 +98,7 @@
         if (keyCode == "ric") {
             controller.up = isPressed;
         }
-    }
+    }*/
 
     function ensureBorders(sprite) {
         if (sprite.x <= 20) {
@@ -138,11 +138,14 @@
             tank1.x += MOVEMENT;
             console.log("X = " + tank1.x + " Y = " + tank1.y);
         }
-        if (controller.space) {
+        if (controller.space && bomb.y <= 50) {
             bomb.x = tank1.x + 20;
             bomb.y = tank1.y + bomb.h;
             console.log("BOMB X = " + bomb.x + " Y = " + bomb.y);
         }
+        /*else if(controller.space){
+            ejemplo();
+        }*/
         ensureBorders(tank1);
     }
 
@@ -150,13 +153,11 @@
         setPosition(tank1);
         setPosition(bomb);
         setPosition(tank2);
-        //setPosition(tank);
     }
 
     function handleControlsFalse(random) {
         toggleKey(random, false);
         handleControlsTank1();
-        //handleControlsTank();
         showSprites();
     }
 
@@ -236,21 +237,52 @@
 
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
-            //postPositionTank2(); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
-            //getPositionTank2(); //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
-            //getLifeTank2();
-            //brainMovesTank1();
-            handleControlsTank1();
-            assignBombTank1();
-            showSprites();
-            var random = Math.random * 4;
-            console.log("primero");
-            //updatePosition();
+            postPositionTank2(); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
+            getPositionTank2(); //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
+            getLifeTank2();
+            brainMovesTank1();
             ensureBorders(tank1);
+            console.log("tank1" + " x = " + tank1.x + " y " + tank1.y);
+            //handleControlsTank1();
+            //assignBombTank1();
+            showSprites();
+            //ejemplo();
+            updatePosition();
             //handleControlsFalse(random);  //PARA CUANDO NO SE UTILIZA TECLA Y SE HACE EL TRUE, COLOCARLO EN FALSE.
             lastLoopRun = new Date().getTime();
         }
         setTimeout('loop();', 20);
+    }
+
+    /*   function ejemplo() {
+           var random = Math.floor(Math.random() * 2);
+           if (random == 0) {
+               updatePosition();
+               if (bomb.y <= 0) {
+                   bomb.x = tank1.x + 20;
+                   bomb.y = tank1.y + bomb.h;
+                   console.log("listo");
+                   showSprites();
+               }
+           } else if (random == 1) {
+               updatePosition2();
+               if (bomb.y >= 480) {
+                   bomb.x = tank1.x + 20;
+                   bomb.y = tank1.y + bomb.h;
+                   console.log("listo");
+                   showSprites();
+               }
+           } else if (random == 2){
+
+           }
+       }*/
+
+    function updatePosition2() {
+        bomb.y += 22;
+    }
+
+    function updatePosition3() {
+        bomb.x += 22;
     }
 
     function assignBombTank1() {
@@ -260,13 +292,13 @@
     function updatePosition() { //
         bomb.y -= 22;
     }
-    document.onkeydown = function(evt) { //movimiento
+    /*document.onkeydown = function(evt) { //movimiento
         toggleKey(evt.keyCode, true);
     };
 
     document.onkeyup = function(evt) { //movimiento
         toggleKey(evt.keyCode, false);
-    };
+    };*/
 
     var tank1 = createObject('tank1', 250, 460, 40, 40);
     var tank2 = createObject('tank2', 120, 120, 40, 40);
