@@ -308,7 +308,7 @@
                 console.log("Entro en SHOT DE 100 y en UP");
                 directionShotTank1 = "UP";
                 //decideDirectionShot();
-                //initBomb();
+                initBomb();
             }
         } else if (countTank == 50) {
 
@@ -324,13 +324,13 @@
                 console.log("ESTA EN SHOOTING IT UP");
                 bomb.y -= 22;
                 console.log("GRACAS MI SEÑOR!");
-                initBomb();
+                //initBomb();
                 countLifeTank2 = 0;
             } else if (directionShotTank1 == "DOWN") {
                 console.log("ESTA EN SHOOTING IT DOWN");
                 bomb.y += 22;
                 console.log("GRACAS MI SEÑOR!");
-                initBomb();
+                //initBomb();
             }
         }
     }
@@ -394,7 +394,6 @@
     var tank1 = createObject('tank1', 250, 460, 40, 40);
     var tank2 = createObject('tank2', 190, 120, 40, 40);
     var bomb = createObject('bomb', 0, -120, 5, 5);
-    //var tank = createObject('tank', 250, 160, 40, 40);
     loop();
 </script>
 
