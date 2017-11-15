@@ -154,9 +154,6 @@
             bomb.y = tank1.y + bomb.h;
             console.log("BOMB X = " + bomb.x + " Y = " + bomb.y);
         }
-        /*else if(controller.space){
-            ejemplo();
-        }*/
         ensureBorders(tank1);
     }
 
@@ -165,14 +162,6 @@
         setPosition(bomb);
         setPosition(tank2);
     }
-
-    function handleControlsFalse(random) {
-        toggleKey(random, false);
-        handleControlsTank1();
-        showObjects();
-    }
-
-
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DEL TANK2
     function postPositionTank2() {
@@ -284,8 +273,8 @@
                     shoot(element, bomb, destinyElement, countLifeTank, "LEFT");
                 }
             }
-        } else if(countLifeTank == 0){
-            alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = "+ countLifeTank);
+        } else if (countLifeTank == 0) {
+            alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = " + countLifeTank);
             countLifeTank = "";
         }
     }
@@ -353,7 +342,6 @@
 
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
-            //console.log("x = " + tank1.x + " y = " + tank1.y);
             postPositionTank2(); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
             getPositionTank2(); //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
             getLifeTank2();
@@ -364,7 +352,6 @@
             decideDirectionShot();
             //initBomb();
             //countLifeTank2 = 0;
-            //handleControlsFalse(random);  //PARA CUANDO NO SE UTILIZA TECLA Y SE HACE EL TRUE, COLOCARLO EN FALSE.
             lastLoopRun = new Date().getTime();
             //console.log("..");
             //console.log(countLifeTank2);
