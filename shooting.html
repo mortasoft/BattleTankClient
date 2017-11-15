@@ -29,7 +29,7 @@
             border-width: 20px;
         }
 
-        #bomb {
+        #bombTank1 {
             background: #ffffff;
             width: 10px;
             height: 10px;
@@ -45,7 +45,7 @@
     <div id="background"></div>
     <div id="tank1"></div>
     <div id="tank2"></div>
-    <div id="bomb"></div>
+    <div id="bombTank1"></div>
     <!--    <div id="tank"></div>-->
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -149,17 +149,17 @@
             tank1.x += MOVEMENT;
             console.log("X = " + tank1.x + " Y = " + tank1.y);
         }
-        if (controller.space && bomb.y <= 50) {
-            bomb.x = tank1.x + 20;
-            bomb.y = tank1.y + bomb.h;
-            console.log("BOMB X = " + bomb.x + " Y = " + bomb.y);
+        if (controller.space && bombTank1.y <= 50) {
+            bombTank1.x = tank1.x + 20;
+            bombTank1.y = tank1.y + bombTank1.h;
+            console.log("bombTank1 X = " + bombTank1.x + " Y = " + bombTank1.y);
         }
         ensureBorders(tank1);
     }
 
     function showObjects() { //actualizar tank1
         setPosition(tank1);
-        setPosition(bomb);
+        setPosition(bombTank1);
         setPosition(tank2);
     }
     //------------------------------------------------------------------------------------------------------//
@@ -240,37 +240,37 @@
             if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
                 tank1.x -= tank1.x - xPositionTank2;
                 showObjects();
-                decideShot("findY", tank1, bomb, tank2, yPositionTank2, countLifeTank2);
+                decideShot("findY", tank1, bombTank1, tank2, yPositionTank2, countLifeTank2);
             } else if (tank1.x < xPositionTank2 && tank1.y != yPositionTank2) {
                 tank1.x += xPositionTank2 - tank1.x;
                 showObjects();
-                decideShot("findY", tank1, bomb, tank2, yPositionTank2, countLifeTank2);
+                decideShot("findY", tank1, bombTank1, tank2, yPositionTank2, countLifeTank2);
             } else if (tank1.y > yPositionTank2 && tank1.x != xPositionTank2) {
                 tank1.y -= tank1.y - yPositionTank2;
                 showObjects();
-                decideShot("findX", tank1, bomb, tank2, xPositionTank2, countLifeTank2);
+                decideShot("findX", tank1, bombTank1, tank2, xPositionTank2, countLifeTank2);
             } else if (tank1.y < yPositionTank2 && tank1.x != xPositionTank2) {
                 tank1.y += yPositionTank2 - tank1.y;
                 showObjects();
-                decideShot("findX", tank1, bomb, tank2, xPositionTank2, countLifeTank2);
+                decideShot("findX", tank1, bombTank1, tank2, xPositionTank2, countLifeTank2);
             }
         }
     }
 
-    function decideShot(angle, element, bomb, destinyElement, positionTank, countLifeTank) {
+    function decideShot(angle, element, bombTank1, destinyElement, positionTank, countLifeTank) {
         if (countLifeTank != 0) {
             //console.log("DECIDE SHOT TIENE COUNT LIFE TANK = " + countLifeTank);
             if (angle == "findY") {
                 if (element.y < positionTank) {
-                    shot(element, bomb, destinyElement, countLifeTank, "DOWN");
+                    shot(element, bombTank1, destinyElement, countLifeTank, "DOWN");
                 } else if (element.y > positionTank) {
-                    shot(element, bomb, destinyElement, countLifeTank, "UP");
+                    shot(element, bombTank1, destinyElement, countLifeTank, "UP");
                 }
             } else if (angle == "findX") {
                 if (element.x < positionTank) {
                     shoot(element, countLifeTank, "RIGHT");
                 } else if (element.x > positionTank) {
-                    shoot(element, bomb, destinyElement, countLifeTank, "LEFT");
+                    shoot(element, bombTank1, destinyElement, countLifeTank, "LEFT");
                 }
             }
         } else if (countLifeTank == 0) {
@@ -279,17 +279,17 @@
         }
     }
 
-    function shot(element, bomb, destinyElement, countTank, moveShot) {
+    function shot(element, bombTank1, destinyElement, countTank, moveShot) {
         if (countTank == 100) {
             if (moveShot == "DOWN") {
                 directionShotTank1 = "DOWN";
-                initBomb();
-                checkCollisionTank(element, bomb, destinyElement, countTank);
+                initbombTank1();
+                checkCollisionTank(element, bombTank1, destinyElement, countTank);
             } else if (moveShot == "UP") {
                 directionShotTank1 = "UP";
                 decideDirectionShot();
-                initBomb();
-                checkCollisionTank(element, bomb, destinyElement, countTank);
+                initbombTank1();
+                checkCollisionTank(element, bombTank1, destinyElement, countTank);
             }
         } else if (countTank == 50) {
 
@@ -299,18 +299,18 @@
         }
     }
 
-    function initBomb() {
-        if (bomb.y <= 20) {
-            bomb.x = tank1.x + 20;
-            bomb.y = tank1.y + bomb.h;
-        } else if (bomb.y > 480) {
-            bomb.x = tank1.x + 20;
-            bomb.y = tank1.y + bomb.h;
+    function initbombTank1() {
+        if (bombTank1.y <= 20) {
+            bombTank1.x = tank1.x + 20;
+            bombTank1.y = tank1.y + bombTank1.h;
+        } else if (bombTank1.y > 480) {
+            bombTank1.x = tank1.x + 20;
+            bombTank1.y = tank1.y + bombTank1.h;
         }
     }
 
-    function checkCollisionTank(element, bomb, destinyElement, countTank) {
-        if (intersects(bomb, destinyElement)) {
+    function checkCollisionTank(element, bombTank1, destinyElement, countTank) {
+        if (intersects(bombTank1, destinyElement)) {
             console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
             if (destinyElement.element == "tank2") {
                 postLifeTank2(countTank);
@@ -328,11 +328,11 @@
         if (countLifeTank2 != 0) {
             if (directionShotTank1 == "UP") {
                 //console.log("ESTA EN SHOOTING IT UP\tGRACAS MI SEÑOR!");
-                bomb.y -= 22;
+                bombTank1.y -= 22;
                 countLifeTank2 = 0;
             } else if (directionShotTank1 == "DOWN") {
                 console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
-                bomb.y += 22;
+                bombTank1.y += 22;
                 countLifeTank2 = 0;
             }
         }
@@ -350,7 +350,7 @@
             //handleControlsTank1();
             showObjects();
             decideDirectionShot();
-            //initBomb();
+            //initbombTank1();
             //countLifeTank2 = 0;
             lastLoopRun = new Date().getTime();
             //console.log("..");
@@ -361,7 +361,8 @@
     }
 
     function moveTank2() {
-        var random = Math.floor(Math.random() * 4);
+
+        /*var random = Math.floor(Math.random() * 4);
         if (random == 0) {
             tank2.x += 15;
             ensureBorders(tank2);
@@ -374,12 +375,12 @@
         } else if (random == 3) {
             tank2.y -= 1;
             ensureBorders(tank2);
-        }
+        }*/
     }
 
     var tank1 = createObject('tank1', 250, 460, 40, 40);
     var tank2 = createObject('tank2', 290, 120, 40, 40);
-    var bomb = createObject('bomb', 0, -120, 5, 5);
+    var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     loop();
 
 </script>
