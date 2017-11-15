@@ -50,11 +50,6 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
-    var LEFT_KEY = 37;
-    var UP_KEY = 38;
-    var RIGHT_KEY = 39;
-    var DOWN_KEY = 40;
-    var SPACE_KEY = 32;
     var MOVEMENT = 20;
 
     var lastLoopRun = 0;
@@ -75,6 +70,8 @@
 
     var getValueLifeTank2 = "";
 
+    var isShootedTank1 = false;
+
     function createObject(element, x, y, w, h) {
         var result = new Object();
         result.element = element;
@@ -85,31 +82,6 @@
         return result;
     }
 
-    /*function toggleKey(keyCode, isPressed) {
-        if (keyCode == LEFT_KEY) {
-            controller.left = isPressed;
-            handleControlsTank1();
-        }
-        if (keyCode == RIGHT_KEY) {
-            controller.right = isPressed;
-            handleControlsTank1();
-        }
-        if (keyCode == UP_KEY) {
-            controller.up = isPressed;
-            handleControlsTank1();
-        }
-        if (keyCode == DOWN_KEY) {
-            controller.down = isPressed;
-            handleControlsTank1();
-        }
-        if (keyCode == SPACE_KEY) {
-            controller.space = isPressed;
-            handleControlsTank1();
-        }
-        if (keyCode == "ric") {
-            controller.up = isPressed;
-        }
-    }*/
 
     function ensureBorders(object) {
         if (object.x <= 20) {
@@ -165,7 +137,8 @@
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DEL TANK2
     function postPositionTank2() {
-        if (postValueTank2InX != tank2.x && postValueTank2InY != tank2.y) {
+        console.log("postT2X = " + postValueTank2InX + " t2,x = " + tank2.x + " pvT2Y = " + postValueTank2InY + " t2.y" + tank2.y);
+        if (postValueTank2InX != tank2.x || postValueTank2InY == tank2.y) {
             $.ajax({
                 type: "POST",
                 url: "http://192.168.0.15:5000/api/v1/users/tank2",
@@ -196,16 +169,6 @@
             yPositionTank2 = data[data.length - 1].y;
             //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
         });
-        //console.log(xPositionTank2);
-        //console.log(yPositionTank2);
-
-        /*            getValueTank2InX = xPositionTank2;
-                    getValueTank2InY = yPositionTank2;
-
-                    console.log("INSIDE GET VALUE T2 X = " + getValueTank2InX + " X POSITION T2 = " + getValueTank2InY);
-                } else {
-                    console.log("GET no ha cambiado la posición el Tank2");
-                }*/
     }
     //------------------------------------------------------------------------------------------------------//
     //POST AND GET METODOS PARA ENVIAR LA VIDA ACTUALIZADA DEL TANK2 Y PARA RECIBIR CUANTO TIENE.
@@ -274,7 +237,7 @@
                 }
             }
         } else if (countLifeTank == 0) {
-            alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = " + countLifeTank);
+            //alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = " + countLifeTank);
             countLifeTank = "";
         }
     }
@@ -303,9 +266,11 @@
         if (bombTank1.y <= 20) {
             bombTank1.x = tank1.x + 20;
             bombTank1.y = tank1.y + bombTank1.h;
+            isShootedTank1 = true;
         } else if (bombTank1.y > 480) {
             bombTank1.x = tank1.x + 20;
             bombTank1.y = tank1.y + bombTank1.h;
+            isShootedTank1 = true;
         }
     }
 
@@ -338,8 +303,6 @@
         }
     }
 
-
-
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
             postPositionTank2(); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
@@ -355,13 +318,15 @@
             lastLoopRun = new Date().getTime();
             //console.log("..");
             //console.log(countLifeTank2);
+            //radar(tank2, bombTank1);
             moveTank2();
         }
         setTimeout('loop();', 100);
     }
 
     function moveTank2() {
-
+        radar(tank2, bombTank1);
+        //console.log("i");
         /*var random = Math.floor(Math.random() * 4);
         if (random == 0) {
             tank2.x += 15;
@@ -378,6 +343,51 @@
         }*/
     }
 
+    function radar(element, bomb) {
+        if (isShootedTank1 == true) {
+            //console.log("ITS SHOOTED BY T1");
+            //console.log("BOMBX " + (bomb.x) + " TANK2 = " + (element.x));
+            if (bomb.x <= element.x) {
+                if (element.x + element.w >= 20) {
+                    console.log("protegiendose 1");
+                    element.x += 5 //prueba;
+                    ensureBorders(element);
+                    showObjects();
+                    //isShootedTank1 = false;
+                } else if (element.x + element.w <= 480) {
+                    element.x -= 5;
+                    ensureBorders(element);
+                    showObjects();
+              //      isShootedTank1 = false;
+                }
+            } else if (bomb.x >= element.x) {
+                if (element.x + element.w >= 20) {
+                    console.log("protegiendose 2");
+                    element.x += 5 //prueba;
+                    ensureBorders(element);
+                    showObjects();
+                    //isShootedTank1 = false;
+                } else if (element.x + element.w <= 480) {
+                    element.x -= 5;
+                    ensureBorders(element);
+                    showObjects();
+                }
+            } else if (bomb.y == element.y) {
+                if (element.y + element.h <= 20) {
+                    element += 20;
+                    ensureBorders(element);
+                    showObjects();
+                } else if (bomb.y + element.h >= 480) {
+                    element -= 20;
+                    ensureBorders(element);
+                    showObjects();
+                }
+            }
+        } else {
+            //brainTank2()......
+            //console.log("relajado");
+        }
+    }
     var tank1 = createObject('tank1', 250, 460, 40, 40);
     var tank2 = createObject('tank2', 290, 120, 40, 40);
     var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
