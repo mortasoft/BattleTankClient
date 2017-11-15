@@ -35,7 +35,6 @@
             height: 10px;
             position: absolute;
         }
-
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -137,9 +136,9 @@
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DEL TANK2
     function postPositionAndLifeTank2(lifeTank2) {
-        console.log("postT2X = " + postValueTank2InX + " t2,x = " + tank2.x + " pvT2Y = " + postValueTank2InY + " t2.y" + tank2.y);
-        console.log(lifeTank2);
-        if (postValueTank2InX != tank2.x || postValueTank2InY == tank2.y) {
+        //console.log("postT2X = " + postValueTank2InX + " t2,x = " + tank2.x + " pvT2Y = " + postValueTank2InY + " t2.y " + tank2.y);
+        //console.log(lifeTank2);
+        if (postValueTank2InX != tank2.x || postValueTank2InY != tank2.y || postValueTank2InX == tank2.x || postValueTank2InY == tank2.y) {
             $.ajax({
                 type: "POST",
                 url: "http://192.168.0.15:5000/api/v1/users/tank2",
@@ -156,8 +155,9 @@
             });
             postValueTank2InX = tank2.x;
             postValueTank2InY = tank2.y;
+            console.log("PVT2x = " + postValueTank2InX + " PVT2y = " + postValueTank2InY);
         } else {
-            //console.log("No ha cambiado la posición el Tank2");
+            console.log("No ha cambiado la posición el Tank2");
         }
     }
 
@@ -169,14 +169,16 @@
             xPositionTank2 = data[data.length - 1].x;
             yPositionTank2 = this;
             yPositionTank2 = data[data.length - 1].y;
+            countLifeTank2 = this;
             countLifeTank2 = data[data.length - 1].vida;
-            //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
+
+            //console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2 + " LIFE = " + countLifeTank2);
         });
     }
 
     function brainMovesTank1() {
         if (xPositionTank2 != "Waiting" && yPositionTank2 != "Waiting") {
-            //console.log("x POSITION TANK " + xPositionTank2 + "Y POSITION TANK = " + yPositionTank2);
+            console.log("x POSITION TANK " + xPositionTank2 + "Y POSITION TANK = " + yPositionTank2);
             if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
                 tank1.x -= tank1.x - xPositionTank2;
                 showObjects();
@@ -193,13 +195,18 @@
                 tank1.y += yPositionTank2 - tank1.y;
                 showObjects();
                 decideShot("findX", tank1, bombTank1, tank2, xPositionTank2, countLifeTank2);
+            } else if (tank1.x == xPositionTank2 && tank1.y != yPositionTank2) {
+                showObjects();
+                decideShot("findY", tank1, bombTank1, tank2, yPositionTank2, countLifeTank2);
+            } else {
+                console.log("Estan en posiciones iguales");
             }
         }
     }
 
     function decideShot(angle, element, bombTank1, destinyElement, positionTank, countLifeTank) {
         if (countLifeTank != 0) {
-            //console.log("DECIDE SHOT TIENE COUNT LIFE TANK = " + countLifeTank);
+            console.log("DECIDE SHOT TIENE COUNT LIFE TANK = " + countLifeTank);
             if (angle == "findY") {
                 if (element.y < positionTank) {
                     shot(element, bombTank1, destinyElement, countLifeTank, "DOWN");
@@ -257,7 +264,7 @@
             console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
             if (destinyElement.element == "tank2") {
                 //postLifeTank2(countTank);
-                alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = " + countLifeTank);
+                alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = " + countTank);
             }
         } else {
             //console.log("No ha intersectado");
@@ -300,7 +307,7 @@
             //radar(tank2, bombTank1);
             moveTank2();
         }
-        setTimeout('loop();', 100);
+        setTimeout('loop();', 1000);
     }
 
     function moveTank2() {
@@ -371,7 +378,6 @@
     var tank2 = createObject('tank2', 290, 120, 40, 40);
     var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     loop();
-
 </script>
 
 </html>
