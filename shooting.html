@@ -110,25 +110,25 @@
         }
     }*/
 
-    function ensureBorders(sprite) {
-        if (sprite.x <= 20) {
-            sprite.x = 20;
+    function ensureBorders(object) {
+        if (object.x <= 20) {
+            object.x = 20;
         }
-        if (sprite.y <= 20) {
-            sprite.y = 20;
+        if (object.y <= 20) {
+            object.y = 20;
         }
-        if (sprite.x + sprite.w > 480) {
-            sprite.x = 480 - sprite.w;
+        if (object.x + object.w > 480) {
+            object.x = 480 - object.w;
         }
-        if (sprite.y + sprite.h > 480) {
-            sprite.y = 480 - sprite.h;
+        if (object.y + object.h > 480) {
+            object.y = 480 - object.h;
         }
     }
 
-    function setPosition(sprite) { //permitirá buscar posición del duende.
-        var e = document.getElementById(sprite.element); //busca el elemento
-        e.style.left = sprite.x + 'px'; //asigna las coordenadas donde estará el sprite
-        e.style.top = sprite.y + 'px'; //asigna las coordenadas donde estará el sprite
+    function setPosition(object) { //permitirá buscar posición del duende.
+        var e = document.getElementById(object.element); //busca el elemento
+        e.style.left = object.x + 'px'; //asigna las coordenadas donde estará el object
+        e.style.top = object.y + 'px'; //asigna las coordenadas donde estará el object
     }
 
     function handleControlsTank1() {
@@ -159,7 +159,7 @@
         ensureBorders(tank1);
     }
 
-    function showSprites() { //actualizar tank1
+    function showObjects() { //actualizar tank1
         setPosition(tank1);
         setPosition(bomb);
         setPosition(tank2);
@@ -168,7 +168,7 @@
     function handleControlsFalse(random) {
         toggleKey(random, false);
         handleControlsTank1();
-        showSprites();
+        showObjects();
     }
 
 
@@ -186,7 +186,7 @@
                 }, null, '\t'),
                 dataType: "json",
                 success: function(data) {
-                    //console.log("Posición del tank 2 actualizada");
+                    console.log("Posición del tank 2 actualizada");
                 }
             });
             postValueTank2InX = tank2.x;
@@ -198,20 +198,24 @@
 
     function getPositionTank2() {
         //console.log("GET VALUE T2 X = " + getValueTank2InX + " X POSITION T2 = " + xPositionTank2);
-        if (getValueTank2InX != xPositionTank2 && getValueTank2InY != yPositionTank2) {
-            $.get("http://192.168.0.15:5000/api/v1/users/tank2", function(data, status) {
-                xPositionTank2 = this;
-                xPositionTank2 = data[0].x;
-                yPositionTank2 = this;
-                yPositionTank2 = data[0].y;
-                //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
-            });
-            getValueTank2InX = xPositionTank2;
-            getValueTank2InY = yPositionTank2;
-            //console.log("INSIDE GET VALUE T2 X = " + getValueTank2InX + " X POSITION T2 = " + getValueTank2InY);
-        } else {
-            //console.log("GET no ha cambiado la posición el Tank2");
-        }
+        //        if (getValueTank2InX != xPositionTank2 && getValueTank2InY != yPositionTank2) {
+        $.get("http://192.168.0.15:5000/api/v1/users/tank2", function(data, status) {
+            xPositionTank2 = this;
+            xPositionTank2 = data[data.length - 1].x;
+            yPositionTank2 = this;
+            yPositionTank2 = data[data.length - 1].y;
+            //            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2);
+        });
+        console.log(xPositionTank2);
+        console.log(yPositionTank2);
+
+        /*            getValueTank2InX = xPositionTank2;
+                    getValueTank2InY = yPositionTank2;
+
+                    console.log("INSIDE GET VALUE T2 X = " + getValueTank2InX + " X POSITION T2 = " + getValueTank2InY);
+                } else {
+                    console.log("GET no ha cambiado la posición el Tank2");
+                }*/
     }
     //------------------------------------------------------------------------------------------------------//
     //POST AND GET METODOS PARA ENVIAR LA VIDA ACTUALIZADA DEL TANK2 Y PARA RECIBIR CUANTO TIENE.
@@ -243,26 +247,25 @@
         if (xPositionTank2 != "Waiting" && yPositionTank2 != "Waiting") {
             //console.log("x POSITION TANK " + xPositionTank2 + "Y POSITION TANK = " + yPositionTank2);
             if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
+                console.log("TANK1.X = " + tank1.x + " xpositionT2 = " + xPositionTank2);
                 tank1.x -= tank1.x - xPositionTank2;
-                showSprites();
-                //            console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
+                showObjects();
+                console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
                 decideShot("findY", tank1, yPositionTank2, countLifeTank2);
-            }
-            if (tank1.x < xPositionTank2 && tank1.y != yPositionTank2) {
+            } else if (tank1.x < xPositionTank2 && tank1.y != yPositionTank2) {
+                console.log("TANK1.X = " + tank1.x + " xpositionT2 = " + xPositionTank2);
                 tank1.x += xPositionTank2 - tank1.x;
-                showSprites();
-                //          console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
+                showObjects();
+                console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
                 decideShot("findY", tank1, yPositionTank2, countLifeTank2);
-            }
-            if (tank1.y > yPositionTank2 && tank1.x != xPositionTank2) {
+            } else if (tank1.y > yPositionTank2 && tank1.x != xPositionTank2) {
                 tank1.y -= tank1.y - yPositionTank2;
-                showSprites();
+                showObjects();
                 //        console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
                 decideShot("findX", tank1, xPositionTank2, countLifeTank2);
-            }
-            if (tank1.y < yPositionTank2 && tank1.x != xPositionTank2) {
+            } else if (tank1.y < yPositionTank2 && tank1.x != xPositionTank2) {
                 tank1.y += yPositionTank2 - tank1.y;
-                showSprites();
+                showObjects();
                 //      console.log("COUNT LIFE TANK 2 = " + countLifeTank2);
                 decideShot("findX", tank1, xPositionTank2, countLifeTank2);
             }
@@ -302,12 +305,13 @@
             if (moveShot == "DOWN") {
                 console.log("Entro en SHOT DE 100 y en DOWN");
                 directionShotTank1 = "DOWN";
+                //decideDirectionShot();
                 //shotDown();
                 initBomb();
             } else if (moveShot == "UP") {
                 console.log("Entro en SHOT DE 100 y en UP");
                 directionShotTank1 = "UP";
-                //decideDirectionShot();
+                decideDirectionShot();
                 initBomb();
             }
         } else if (countTank == 50) {
@@ -325,11 +329,14 @@
                 bomb.y -= 22;
                 console.log("GRACAS MI SEÑOR!");
                 //initBomb();
+                //brainMovesTank1();
                 countLifeTank2 = 0;
             } else if (directionShotTank1 == "DOWN") {
                 console.log("ESTA EN SHOOTING IT DOWN");
                 bomb.y += 22;
                 console.log("GRACAS MI SEÑOR!");
+                countLifeTank2 = 0;
+                //brainMovesTank1();
                 //initBomb();
             }
         }
@@ -347,13 +354,14 @@
 
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
+            console.log("x = " + tank1.x + " y = " + tank1.y);
             postPositionTank2(); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
             getPositionTank2(); //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
             getLifeTank2();
             brainMovesTank1();
             ensureBorders(tank1);
             //handleControlsTank1();
-            showSprites();
+            showObjects();
             decideDirectionShot();
             //initBomb();
             //countLifeTank2 = 0;
@@ -369,10 +377,10 @@
     function moveTank2() {
         var random = Math.floor(Math.random() * 4);
         if (random == 0) {
-            tank2.x += 5;
+            tank2.x += 15;
             ensureBorders(tank2);
         } else if (random == 1) {
-            tank2.x -= 5;
+            tank2.x -= 15;
             ensureBorders(tank2);
         } else if (random == 2) {
             tank2.y += 1;
@@ -392,7 +400,7 @@
     };*/
 
     var tank1 = createObject('tank1', 250, 460, 40, 40);
-    var tank2 = createObject('tank2', 190, 120, 40, 40);
+    var tank2 = createObject('tank2', 290, 120, 40, 40);
     var bomb = createObject('bomb', 0, -120, 5, 5);
     loop();
 </script>
