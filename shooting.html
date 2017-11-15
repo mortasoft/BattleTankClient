@@ -155,7 +155,7 @@
             });
             postValueTank2InX = tank2.x;
             postValueTank2InY = tank2.y;
-            console.log("PVT2x = " + postValueTank2InX + " PVT2y = " + postValueTank2InY);
+            //console.log("PVT2x = " + postValueTank2InX + " PVT2y = " + postValueTank2InY);
         } else {
             console.log("No ha cambiado la posición el Tank2");
         }
@@ -178,7 +178,7 @@
 
     function brainMovesTank1() {
         if (xPositionTank2 != "Waiting" && yPositionTank2 != "Waiting") {
-            console.log("x POSITION TANK " + xPositionTank2 + "Y POSITION TANK = " + yPositionTank2);
+            console.log("x POSITION TANK " + xPositionTank2 + " Y POSITION TANK = " + yPositionTank2);
             if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
                 tank1.x -= tank1.x - xPositionTank2;
                 showObjects();
@@ -334,36 +334,40 @@
             //console.log("ITS SHOOTED BY T1");
             //console.log("BOMBX " + (bomb.x) + " TANK2 = " + (element.x));
             if (bomb.x <= element.x) {
-                if (element.x + element.w >= 20) {
-                    //console.log("protegiendose 1");
+                if (element.x + element.w >= 20 && element.x + element.w < 440) {
+                    console.log("MAYOR QUE 20 MENOR QUE 440");
                     element.x += 5 //prueba;
                     ensureBorders(element);
                     showObjects();
                     //isShootedTank1 = false;
-                } else if (element.x + element.w <= 480) {
+                } else if (element.x + element.w <= 440 && element.x + element.w > 20) {
+                    console.log("MENOR QUE 440 MAYOR QUE 20 ");
                     element.x -= 5;
                     ensureBorders(element);
                     showObjects();
                     //      isShootedTank1 = false;
                 }
             } else if (bomb.x >= element.x) {
-                if (element.x + element.w >= 20) {
-                    //console.log("protegiendose 2");
+                if (element.x + element.w >= 20 && element.x + element.w < 440) {
+                    console.log("MAYOR QUE 20 MENOR QUE 440 =====");
+                    //console.log("protegiendose 1");
                     element.x += 5 //prueba;
                     ensureBorders(element);
                     showObjects();
                     //isShootedTank1 = false;
-                } else if (element.x + element.w <= 480) {
+                } else if (element.x + element.w <= 440 && element.x + element.w > 20) {
+                    console.log("MENOR QUE 440 MAYOR QUE 20 ========s");
                     element.x -= 5;
                     ensureBorders(element);
                     showObjects();
+                    //      isShootedTank1 = false;
                 }
             } else if (bomb.y == element.y) {
-                if (element.y + element.h <= 20) {
+                if (element.y + element.h >= 20 && element.y + element.h < 440) {
                     element += 20;
                     ensureBorders(element);
                     showObjects();
-                } else if (bomb.y + element.h >= 480) {
+                } else if (element.y + element.h <= 440 && element.y + element.h < 20) {
                     element -= 20;
                     ensureBorders(element);
                     showObjects();
