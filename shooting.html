@@ -64,14 +64,17 @@
     var countLifeTank2 = 100;
     var countLifeTank1 = 100;
 
-    var typeShotTank1 = "0";
-    var directionShotTank1 = "";
-
     var postValueTank2InX = "";
     var postValueTank2InY = "";
 
     var postValueTank1InX = "";
     var postValueTank1InY = "";
+
+    var xPositionTank1 = "Waiting";
+    var yPositionTank1 = "Waiting";
+
+    var typeShotTank1 = "0";
+    var directionShotTank1 = "";
 
     var isShootedTank1 = false;
     //------------------------------------------------------------------------------------------------------//
@@ -161,6 +164,14 @@
             countLifeTank2 = this;
             countLifeTank2 = data[data.length - 1]['tank2'].life;
             console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2 + " LIFE = " + countLifeTank2);
+
+            xPositionTank1 = this;
+            xPositionTank1 = data[data.length-2]['tank1'].x;
+            yPositionTank1 = this;
+            yPositionTank1 = data[data.length-2]['tank1'].y;
+            countLifeTank1 = this;
+            countLifeTank1 = data[data.length-2]['tank1'].life;
+            console.log("GET X = " + xPositionTank1 + " Y = " + yPositionTank1 + " LIFE = " + countLifeTank1);
         });
     }
     //------------------------------------------------------------------------------------------------------//
@@ -290,16 +301,11 @@
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
             postPositionAndLifeOfTanks(countLifeTank2, countLifeTank1); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
             getPositionTank2(); //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
-            //getLifeTank2();
             brainMovesTank1();
             ensureBorders(tank1);
-            //handleControlsTank1();
             showObjects();
             decideDirectionShot();
-            //initbombTank1();
-            //countLifeTank2 = 0;
             lastLoopRun = new Date().getTime();
-            //console.log(countLifeTank2);
             radar(tank2, bombTank1);
             moveTank2();
         }
