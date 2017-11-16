@@ -178,7 +178,7 @@
 
     function brainMovesTank1() {
         if (xPositionTank2 != "Waiting" && yPositionTank2 != "Waiting") {
-            console.log("x POSITION TANK " + xPositionTank2 + " Y POSITION TANK = " + yPositionTank2);
+            //console.log("x POSITION TANK " + xPositionTank2 + " Y POSITION TANK = " + yPositionTank2);
             if (tank1.x > xPositionTank2 && tank1.y != yPositionTank2) {
                 tank1.x -= tank1.x - xPositionTank2;
                 showObjects();
@@ -206,7 +206,7 @@
 
     function decideShot(angle, element, bombTank1, destinyElement, positionTank, countLifeTank) {
         if (countLifeTank != 0) {
-            console.log("DECIDE SHOT TIENE COUNT LIFE TANK = " + countLifeTank);
+            //console.log("DECIDE SHOT TIENE COUNT LIFE TANK = " + countLifeTank);
             if (angle == "findY") {
                 if (element.y < positionTank) {
                     shot(element, bombTank1, destinyElement, countLifeTank, "DOWN");
@@ -307,61 +307,52 @@
             //radar(tank2, bombTank1);
             moveTank2();
         }
-        setTimeout('loop();', 1000);
+        setTimeout('loop();', 400);
     }
 
     function moveTank2() {
-        radar(tank2, bombTank1);
-        //console.log("i");
-        /*var random = Math.floor(Math.random() * 4);
-        if (random == 0) {
-            tank2.x += 15;
-            ensureBorders(tank2);
-        } else if (random == 1) {
-            tank2.x -= 15;
-            ensureBorders(tank2);
-        } else if (random == 2) {
-            tank2.y += 1;
-            ensureBorders(tank2);
-        } else if (random == 3) {
-            tank2.y -= 1;
-            ensureBorders(tank2);
-        }*/
+        radar(tank2, bombTank1, tank1);
+
+    }
+    var moveLeft = true;
+    var moveRight = true;
+
+    function checkMovementRadar(element, type) {
+        if (moveLeft) {
+            element.x -= 5;
+            showObjects();
+        } else if (moveRight) {
+            element.x += 5;
+            showObjects();
+        }
+        if (element.x == 440) {
+            //console.log("[BOMBA MENOR] IGUAL QUE 440" + " TIPO " + type);
+            element.x -= 5;
+            //ensureBorders(element);
+            showObjects();
+            moveRight = false;
+            moveLeft = true;
+        } else if (element.x == 20) {
+            //console.log("[BOMBA MENOR] IGUAL QUE 20 BOMBA MENOR" + " TIPO " + type);
+            element.x += 5;
+            //ensureBorders(element);
+            showObjects();
+            moveLeft = false;
+            moveRight = true;
+        }
+        //COLOCA LA Y
     }
 
-    function radar(element, bomb) {
+    function radar(element, bomb, origin) {
         if (isShootedTank1 == true) {
             //console.log("ITS SHOOTED BY T1");
             //console.log("BOMBX " + (bomb.x) + " TANK2 = " + (element.x));
-            if (bomb.x <= element.x) {
-                if (element.x + element.w >= 20 && element.x + element.w < 440) {
-                    console.log("MAYOR QUE 20 MENOR QUE 440");
-                    element.x += 5 //prueba;
-                    ensureBorders(element);
-                    showObjects();
-                    //isShootedTank1 = false;
-                } else if (element.x + element.w <= 440 && element.x + element.w > 20) {
-                    console.log("MENOR QUE 440 MAYOR QUE 20 ");
-                    element.x -= 5;
-                    ensureBorders(element);
-                    showObjects();
-                    //      isShootedTank1 = false;
-                }
-            } else if (bomb.x >= element.x) {
-                if (element.x + element.w >= 20 && element.x + element.w < 440) {
-                    console.log("MAYOR QUE 20 MENOR QUE 440 =====");
-                    //console.log("protegiendose 1");
-                    element.x += 5 //prueba;
-                    ensureBorders(element);
-                    showObjects();
-                    //isShootedTank1 = false;
-                } else if (element.x + element.w <= 440 && element.x + element.w > 20) {
-                    console.log("MENOR QUE 440 MAYOR QUE 20 ========s");
-                    element.x -= 5;
-                    ensureBorders(element);
-                    showObjects();
-                    //      isShootedTank1 = false;
-                }
+            if (bomb.x < element.x) {
+                checkMovementRadar(element);
+            } else if (bomb.x > element.x) {
+                checkMovementRadar(element);
+            } else if (bomb.x == element.x) {
+                checkMovementRadar(element);
             } else if (bomb.y == element.y) {
                 if (element.y + element.h >= 20 && element.y + element.h < 440) {
                     element += 20;
@@ -379,7 +370,7 @@
         }
     }
     var tank1 = createObject('tank1', 250, 460, 40, 40);
-    var tank2 = createObject('tank2', 290, 120, 40, 40);
+    var tank2 = createObject('tank2', 25, 120, 40, 40);
     var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     loop();
 </script>
