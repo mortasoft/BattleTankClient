@@ -35,6 +35,7 @@
             height: 10px;
             position: absolute;
         }
+
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -59,17 +60,18 @@
 
     var xPositionTank2 = "Waiting";
     var yPositionTank2 = "Waiting";
+
     var countLifeTank2 = 100;
+    var countLifeTank1 = 100;
 
     var typeShotTank1 = "0";
     var directionShotTank1 = "";
 
     var postValueTank2InX = "";
     var postValueTank2InY = "";
-    var getValueTank2InX = "";
-    var getValueTank2InY = "";
 
-    var getValueLifeTank2 = "";
+    var postValueTank1InX = "";
+    var postValueTank1InY = "";
 
     var isShootedTank1 = false;
     //------------------------------------------------------------------------------------------------------//
@@ -117,22 +119,29 @@
     }
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DEL TANK2
-    function postPositionAndLifeTank2(lifeTank2) {
+    function postPositionAndLifeOfTanks(lifeTank1, lifeTank2) {
         //console.log("postT2X = " + postValueTank2InX + " t2,x = " + tank2.x + " pvT2Y = " + postValueTank2InY + " t2.y " + tank2.y);
         //console.log(lifeTank2);
-        if (postValueTank2InX != tank2.x || postValueTank2InY != tank2.y || postValueTank2InX == tank2.x || postValueTank2InY == tank2.y) {
+        if (postValueTank2InX != tank2.x || postValueTank2InY != tank2.y || postValueTank2InX == tank2.x || postValueTank2InY == tank2.y || postValueTank1InX != tank1.x || postValueTank1InY != tank1.y || postValueTank1InX == tank1.x || postValueTank1InY == tank1.x) {
             $.ajax({
                 type: "POST",
-                url: "http://192.168.0.15:5000/api/v1/users/tank2",
+                url: "http://192.168.0.15:5000/api/v1/users/tank",
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({
-                    x: tank2.x,
-                    y: tank2.y,
-                    total_life: lifeTank2
+                    tank1: {
+                        x:tank1.x,
+                        y:tank1.y,
+                        total_life_t1: countLifeTank1
+                    },
+                    tank2: {
+                        x: tank2.x,
+                        y: tank2.y,
+                        total_life_t2: countLifeTank2
+                    }
                 }, null, '\t'),
                 dataType: "json",
                 success: function(data) {
-                    //console.log("Posición del tank 2 actualizada");
+                    console.log("Posición del tank 2 actualizada");
                 }
             });
             postValueTank2InX = tank2.x;
@@ -144,17 +153,14 @@
     }
 
     function getPositionTank2() {
-        //console.log("GET VALUE T2 X = " + getValueTank2InX + " X POSITION T2 = " + xPositionTank2);
-        //        if (getValueTank2InX != xPositionTank2 && getValueTank2InY != yPositionTank2) {
-        $.get("http://192.168.0.15:5000/api/v1/users/tank2", function(data, status) {
+        $.get("http://192.168.0.15:5000/api/v1/users/tank", function(data, status) {
             xPositionTank2 = this;
-            xPositionTank2 = data[data.length - 1].x;
+            xPositionTank2 = data[data.length - 1]['tank2'].x;
             yPositionTank2 = this;
-            yPositionTank2 = data[data.length - 1].y;
+            yPositionTank2 = data[data.length - 1]['tank2'].y;
             countLifeTank2 = this;
-            countLifeTank2 = data[data.length - 1].vida;
-
-            //console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2 + " LIFE = " + countLifeTank2);
+            countLifeTank2 = data[data.length - 1]['tank2'].life;
+            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2 + " LIFE = " + countLifeTank2);
         });
     }
     //------------------------------------------------------------------------------------------------------//
@@ -282,7 +288,7 @@
     //LLAMADOS A LAS DIFERENTES FUNCIONES.
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
-            postPositionAndLifeTank2(countLifeTank2); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
+            postPositionAndLifeOfTanks(countLifeTank2, countLifeTank1); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
             getPositionTank2(); //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
             //getLifeTank2();
             brainMovesTank1();
@@ -293,9 +299,8 @@
             //initbombTank1();
             //countLifeTank2 = 0;
             lastLoopRun = new Date().getTime();
-            //console.log("..");
             //console.log(countLifeTank2);
-            //radar(tank2, bombTank1);
+            radar(tank2, bombTank1);
             moveTank2();
         }
         setTimeout('loop();', 400);
@@ -369,6 +374,7 @@
     var tank2 = createObject('tank2', 25, 120, 40, 40);
     var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     loop();
+
 </script>
 
 </html>
