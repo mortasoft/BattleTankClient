@@ -49,6 +49,8 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+    //------------------------------------------------------------------------------------------------------//
+    //VARIABLES GLOBALES.
     var MOVEMENT = 20;
 
     var lastLoopRun = 0;
@@ -70,7 +72,8 @@
     var getValueLifeTank2 = "";
 
     var isShootedTank1 = false;
-
+    //------------------------------------------------------------------------------------------------------//
+    //CREAR OBJETOS
     function createObject(element, x, y, w, h) {
         var result = new Object();
         result.element = element;
@@ -81,6 +84,8 @@
         return result;
     }
 
+    //------------------------------------------------------------------------------------------------------//
+    //ASEGURAR BORDES CON LOS OBJETOS QUE SE PASEN COMO PARÁMETRO.
 
     function ensureBorders(object) {
         if (object.x <= 20) {
@@ -96,15 +101,15 @@
             object.y = 480 - object.h;
         }
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //ASIGNAR POSICIONES EN EL DRAW.
     function setPosition(object) { //permitirá buscar posición del duende.
         var e = document.getElementById(object.element); //busca el elemento
         e.style.left = object.x + 'px'; //asigna las coordenadas donde estará el object
         e.style.top = object.y + 'px'; //asigna las coordenadas donde estará el object
     }
-
-
-
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN DE MOSTRAR PARA ASIGNAR TODOS LOS OBJETOS.
     function showObjects() { //actualizar tank1
         setPosition(tank1);
         setPosition(bombTank1);
@@ -152,7 +157,8 @@
             //console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2 + " LIFE = " + countLifeTank2);
         });
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //BRAIN DEL TANK1
     function brainMovesTank1() {
         if (xPositionTank2 != "Waiting" && yPositionTank2 != "Waiting") {
             //console.log("x POSITION TANK " + xPositionTank2 + " Y POSITION TANK = " + yPositionTank2);
@@ -180,7 +186,8 @@
             }
         }
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN DE DECIDIR DONDE SERÁ LA DIRECCIÓN DEL DISPARO
     function decideShot(angle, element, bombTank1, destinyElement, positionTank, countLifeTank) {
         if (countLifeTank != 0) {
             //console.log("DECIDE SHOT TIENE COUNT LIFE TANK = " + countLifeTank);
@@ -203,7 +210,8 @@
             console.log(countLifeTank);
         }
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //EJECUTAR DISPARO DEPENDIENDO DE LA CANTIDAD DE VIDA, Y LA DIRECCIÓN DEL DISPARO.
     function shot(element, bombTank1, destinyElement, countTank, moveShot) {
         if (countTank == 100) {
             if (moveShot == "DOWN") {
@@ -223,7 +231,8 @@
 
         }
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //INICIALIZAR LA POSICIÓN DEL DISPARO DEL TANK1
     function initbombTank1() {
         if (bombTank1.y <= 20) {
             bombTank1.x = tank1.x + 20;
@@ -235,7 +244,8 @@
             isShootedTank1 = true;
         }
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN QUE PERMITE CHECKEAR SI COLISIONÓ EL OBJETO DE DESTINO. SI ES CIERTO DETIENE EL JUEGO.
     function checkCollisionTank(element, bombTank1, destinyElement, countTank) {
         if (intersects(bombTank1, destinyElement)) {
             console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
@@ -247,11 +257,13 @@
             //console.log("No ha intersectado");
         }
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN QUE PERMITE INTERSECTAR DOS OBJETOS MEDIANTE TRUE O FALSE EN SU POSICIÓN Y MEDIDA.
     function intersects(a, b) {
         return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN DE DECIDIR LA DIRECCIÓN DEL DISPARO CON VARIABLE GLOBAL DIRECCIÓN SHOT TANK1 Y LA VELOCIDAD DE DISPARO.
     function decideDirectionShot() { //
         if (countLifeTank2 != 0) {
             if (directionShotTank1 == "UP") {
@@ -265,7 +277,9 @@
             }
         }
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN PRINCIPAL DEL JUEGO QUE SE REPETIRÁ DEPENDIENDO DEL TIEMPO EN SETTIMEOUT CON CADA UNO DE LOS
+    //LLAMADOS A LAS DIFERENTES FUNCIONES.
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
             postPositionAndLifeTank2(countLifeTank2); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
@@ -286,14 +300,16 @@
         }
         setTimeout('loop();', 400);
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN DE PIVOT HACÍA EL RADAR QUE EN ESTE CASO HACE RADAR A DISPAROS PROVENIENTES DEL TANK1.
     function moveTank2() {
         radar(tank2, bombTank1, tank1);
 
     }
     var moveLeft = true;
     var moveRight = true;
-
+    //------------------------------------------------------------------------------------------------------//
+    //CHECKEA LOS MOVIMIENTOS QUE DEBE HACER EL TANK Y LA DIRECCIÓN QUE DEBE IR DEPENDIENDO EL DISPARO.
     function checkMovementRadar(element, type) {
         if (moveLeft) {
             element.x -= 5;
@@ -319,7 +335,8 @@
         }
         //COLOCA LA Y
     }
-
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN DE RADAR (DEFENSIVA) PARA PODER MOVERSE Y PROTEGERSE PARA EVITAR EL DISPARO DEL OPONENTE.
     function radar(element, bomb, origin) {
         if (isShootedTank1 == true) {
             //console.log("ITS SHOOTED BY T1");
@@ -346,6 +363,8 @@
             //console.log("relajado");
         }
     }
+    //------------------------------------------------------------------------------------------------------//
+    //INICIALIZACIÓN DE LOS DIFERENTES OBJETOS QUE SE USARAN EN EL JUEGO.
     var tank1 = createObject('tank1', 250, 460, 40, 40);
     var tank2 = createObject('tank2', 25, 120, 40, 40);
     var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
