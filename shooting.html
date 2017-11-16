@@ -35,7 +35,6 @@
             height: 10px;
             position: absolute;
         }
-
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -77,6 +76,10 @@
     var directionShotTank1 = "";
 
     var isShootedTank1 = false;
+    var isShootedTank2 = false;
+
+    var moveLeft = true;
+    var moveRight = true;
     //------------------------------------------------------------------------------------------------------//
     //CREAR OBJETOS
     function createObject(element, x, y, w, h) {
@@ -132,8 +135,8 @@
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({
                     tank1: {
-                        x:tank1.x,
-                        y:tank1.y,
+                        x: tank1.x,
+                        y: tank1.y,
                         total_life_t1: countLifeTank1
                     },
                     tank2: {
@@ -144,7 +147,7 @@
                 }, null, '\t'),
                 dataType: "json",
                 success: function(data) {
-                    console.log("Posición del tank 2 actualizada");
+                    //   console.log("Posición del tank 2 actualizada");
                 }
             });
             postValueTank2InX = tank2.x;
@@ -163,15 +166,15 @@
             yPositionTank2 = data[data.length - 1]['tank2'].y;
             countLifeTank2 = this;
             countLifeTank2 = data[data.length - 1]['tank2'].life;
-            console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2 + " LIFE = " + countLifeTank2);
+            //console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2 + " LIFE = " + countLifeTank2);
 
             xPositionTank1 = this;
-            xPositionTank1 = data[data.length-2]['tank1'].x;
+            xPositionTank1 = data[data.length - 2]['tank1'].x;
             yPositionTank1 = this;
-            yPositionTank1 = data[data.length-2]['tank1'].y;
+            yPositionTank1 = data[data.length - 2]['tank1'].y;
             countLifeTank1 = this;
-            countLifeTank1 = data[data.length-2]['tank1'].life;
-            console.log("GET X = " + xPositionTank1 + " Y = " + yPositionTank1 + " LIFE = " + countLifeTank1);
+            countLifeTank1 = data[data.length - 2]['tank1'].life;
+            //console.log("GET X = " + xPositionTank1 + " Y = " + yPositionTank1 + " LIFE = " + countLifeTank1);
         });
     }
     //------------------------------------------------------------------------------------------------------//
@@ -202,6 +205,10 @@
                 console.log("Estan en posiciones iguales");
             }
         }
+    }
+
+    function movementTank2() {
+
     }
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN DE DECIDIR DONDE SERÁ LA DIRECCIÓN DEL DISPARO
@@ -279,7 +286,7 @@
     function intersects(a, b) {
         return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
     }
-    //------------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------------------x-------//
     //FUNCIÓN DE DECIDIR LA DIRECCIÓN DEL DISPARO CON VARIABLE GLOBAL DIRECCIÓN SHOT TANK1 Y LA VELOCIDAD DE DISPARO.
     function decideDirectionShot() { //
         if (countLifeTank2 != 0) {
@@ -306,19 +313,45 @@
             showObjects();
             decideDirectionShot();
             lastLoopRun = new Date().getTime();
-            radar(tank2, bombTank1);
-            moveTank2();
+            //radar(tank2, bombTank1);
+            brainMovesTank2();
         }
         setTimeout('loop();', 400);
     }
     //------------------------------------------------------------------------------------------------------//
-    //FUNCIÓN DE PIVOT HACÍA EL RADAR QUE EN ESTE CASO HACE RADAR A DISPAROS PROVENIENTES DEL TANK1.
-    function moveTank2() {
-        radar(tank2, bombTank1, tank1);
-
+    //FUNCIÓN DE PIVOT HACÍA EL RADAR QUE EN ESTE CASO HACE RADAR A DISPAROS PROVENIENTES DEL TANK1 o DISPARAR AL OPONENTE.
+    function brainMovesTank2() {
+        //DEFENDERSE
+        if (isShootedTank1 == true) {
+            radar(tank2, bombTank1, isShootedTank1);
+        }
+        //OFENSIVA
+        movementTank2();
     }
-    var moveLeft = true;
-    var moveRight = true;
+
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN DE RADAR (DEFENSIVA) PARA PODER MOVERSE Y PROTEGERSE PARA EVITAR EL DISPARO DEL OPONENTE.
+    function radar(element, bomb, origin) {
+        //console.log("ITS SHOOTED BY T1");
+        //console.log("BOMBX " + (bomb.x) + " TANK2 = " + (element.x));
+        if (bomb.x < element.x) {
+            checkMovementRadar(element, origin);
+        } else if (bomb.x > element.x) {
+            checkMovementRadar(element, origin);
+        } else if (bomb.x == element.x) {
+            checkMovementRadar(element, origin);
+        } else if (bomb.y == element.y) {
+            if (element.y + element.h >= 20 && element.y + element.h < 440) {
+                element += 20;
+                ensureBorders(element);
+                showObjects();
+            } else if (element.y + element.h <= 440 && element.y + element.h < 20) {
+                element -= 20;
+                ensureBorders(element);
+                showObjects();
+            }
+        }
+    }
     //------------------------------------------------------------------------------------------------------//
     //CHECKEA LOS MOVIMIENTOS QUE DEBE HACER EL TANK Y LA DIRECCIÓN QUE DEBE IR DEPENDIENDO EL DISPARO.
     function checkMovementRadar(element, type) {
@@ -330,14 +363,12 @@
             showObjects();
         }
         if (element.x == 440) {
-            //console.log("[BOMBA MENOR] IGUAL QUE 440" + " TIPO " + type);
             element.x -= 5;
             //ensureBorders(element);
             showObjects();
             moveRight = false;
             moveLeft = true;
         } else if (element.x == 20) {
-            //console.log("[BOMBA MENOR] IGUAL QUE 20 BOMBA MENOR" + " TIPO " + type);
             element.x += 5;
             //ensureBorders(element);
             showObjects();
@@ -347,40 +378,11 @@
         //COLOCA LA Y
     }
     //------------------------------------------------------------------------------------------------------//
-    //FUNCIÓN DE RADAR (DEFENSIVA) PARA PODER MOVERSE Y PROTEGERSE PARA EVITAR EL DISPARO DEL OPONENTE.
-    function radar(element, bomb, origin) {
-        if (isShootedTank1 == true) {
-            //console.log("ITS SHOOTED BY T1");
-            //console.log("BOMBX " + (bomb.x) + " TANK2 = " + (element.x));
-            if (bomb.x < element.x) {
-                checkMovementRadar(element);
-            } else if (bomb.x > element.x) {
-                checkMovementRadar(element);
-            } else if (bomb.x == element.x) {
-                checkMovementRadar(element);
-            } else if (bomb.y == element.y) {
-                if (element.y + element.h >= 20 && element.y + element.h < 440) {
-                    element += 20;
-                    ensureBorders(element);
-                    showObjects();
-                } else if (element.y + element.h <= 440 && element.y + element.h < 20) {
-                    element -= 20;
-                    ensureBorders(element);
-                    showObjects();
-                }
-            }
-        } else {
-            //brainTank2()......
-            //console.log("relajado");
-        }
-    }
-    //------------------------------------------------------------------------------------------------------//
     //INICIALIZACIÓN DE LOS DIFERENTES OBJETOS QUE SE USARAN EN EL JUEGO.
     var tank1 = createObject('tank1', 250, 460, 40, 40);
     var tank2 = createObject('tank2', 25, 120, 40, 40);
     var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     loop();
-
 </script>
 
 </html>
