@@ -103,30 +103,7 @@
         e.style.top = object.y + 'px'; //asigna las coordenadas donde estará el object
     }
 
-    function handleControlsTank1() {
-        if (controller.up) {
-            tank1.y -= MOVEMENT;
-            console.log("X = " + tank1.x + " Y = " + tank1.y);
-        }
-        if (controller.down) {
-            tank1.y += MOVEMENT;
-            console.log("X = " + tank1.x + " Y = " + tank1.y);
-        }
-        if (controller.left) {
-            tank1.x -= MOVEMENT;
-            console.log("X = " + tank1.x + " Y = " + tank1.y);
-        }
-        if (controller.right) {
-            tank1.x += MOVEMENT;
-            console.log("X = " + tank1.x + " Y = " + tank1.y);
-        }
-        if (controller.space && bombTank1.y <= 50) {
-            bombTank1.x = tank1.x + 20;
-            bombTank1.y = tank1.y + bombTank1.h;
-            console.log("bombTank1 X = " + bombTank1.x + " Y = " + bombTank1.y);
-        }
-        ensureBorders(tank1);
-    }
+
 
     function showObjects() { //actualizar tank1
         setPosition(tank1);
