@@ -16,6 +16,28 @@
             height: 40px;
             position: absolute;
         }
+        /*    <!--    CODIGO QUE AGREGAR-->        */
+
+        #obstacle1 {
+            background: #8ECBA2;
+            width: 80px;
+            height: 40px;
+            position: absolute;
+        }
+
+        #obstacle2 {
+            background: #8ECBA2;
+            width: 80px;
+            height: 40px;
+            position: absolute;
+        }
+
+        #obstacle3 {
+            background: #8ECBA2;
+            width: 80px;
+            height: 40px;
+            position: absolute;
+        }
 
         #background {
             background: #E00001;
@@ -35,6 +57,7 @@
             height: 10px;
             position: absolute;
         }
+
         #bombTank2 {
             background: #ffffff;
             width: 10px;
@@ -48,10 +71,19 @@
 
 <body>
     <div id="background"></div>
-    <div id="tank1"></div>
-    <div id="tank2"></div>
+    <div id="tank1">
+        <h3>T1</h3>
+    </div>
+    <div id="tank2">
+        <h3>T2</h3>
+    </div>
     <div id="bombTank1"></div>
     <div id="bombTank2"></div>
+    <!--    CODIGO QUE AGREGAR-->
+    <div id="obstacle1">
+    </div>
+    <div id="obstacle2"></div>
+    <div id="obstacle3"></div>
     <!--    <div id="tank"></div>-->
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -109,6 +141,13 @@
             object.y = 480 - object.h;
         }
     }
+
+    function ensureObstacles(object) {
+        if (object.y + object.h >= 150 && object.x + object.w >= 100) {
+            bombTank2.x = object.x + 20;
+            bombTank2.y = object.y + object.h;
+        }
+    }
     //------------------------------------------------------------------------------------------------------//
     //ASIGNAR POSICIONES EN EL DRAW.
     function setPosition(object) { //permitirá buscar posición del duende.
@@ -120,9 +159,13 @@
     //FUNCIÓN DE MOSTRAR PARA ASIGNAR TODOS LOS OBJETOS.
     function showObjects() { //actualizar tank1
         setPosition(tank1);
-     //   setPosition(bombTank1);
+        //   setPosition(bombTank1);
         setPosition(tank2);
         setPosition(bombTank2);
+        //CODIGO QUE AGREGAR
+        setPosition(obstacle1);
+        setPosition(obstacle2);
+        setPosition(obstacle3);
     }
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DEL TANK2
@@ -257,7 +300,7 @@
             isShootedTank1 = true;
         }
     }
-     //------------------------------------------------------------------------------------------------------//
+    //------------------------------------------------------------------------------------------------------//
     //INICIALIZAR LA POSICIÓN DEL DISPARO DEL TANK2
     function initbombTank2() {
         if (bombTank2.y <= 20) {
@@ -282,7 +325,7 @@
             }
             if (destinyElement.element == "tank1") {
                 //postLifeTank2(countTank);
-                alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = " + countTank);
+                //alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = " + countTank);
             }
         } else {
             //console.log("No ha intersectado");
@@ -297,7 +340,7 @@
     //FUNCIÓN DE DECIDIR LA DIRECCIÓN DEL DISPARO CON VARIABLE GLOBAL DIRECCIÓN SHOT TANK1 Y LA VELOCIDAD DE DISPARO.
     function decideDirectionShot() { //
         if (countLifeTank2 != 0) {
-     //       console.log("DIFERENTE DE CERO? " + countLifeTank2);
+            //       console.log("DIFERENTE DE CERO? " + countLifeTank2);
             if (directionShotTank1 == "UP") {
                 //console.log("ESTA EN SHOOTING IT UP\tGRACAS MI SEÑOR!");
                 bombTank1.y -= 22;
@@ -316,42 +359,48 @@
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
             moveTank2();
             ensureBorders(tank2);
+            ensureObstacles(bombTank2);
             showObjects();
             decideDirectionShot();
             lastLoopRun = new Date().getTime();
-            checkCollisionTank(tank2, bombTank2, tank1,countLifeTank1);
+            checkCollisionTank(tank2, bombTank2, tank1, countLifeTank1);
         }
-        setTimeout('ciclo();', 100);
+        setTimeout('ciclo();', 10);
     }
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN DE PIVOT HACÍA EL RADAR QUE EN ESTE CASO HACE RADAR A DISPAROS PROVENIENTES DEL TANK1.
     function moveTank2() {
         //radar(tank2, bombTank1, tank1);
         loop = Math.floor(Math.random() * 2);
-        //console.log(loop);
         if (loop == 0) {
+            console.log(loop);
             tank2.x -= 20;
             directionShotTank1 = "DOWN";
             showObjects();
             initbombTank2();
-            ensureBorders(bombTank2);
+            //ensureBorders(bombTank2);
 
         } else if (loop == 1) {
             tank2.x += 20;
             directionShotTank1 = "DOWN";
             showObjects();
             initbombTank2();
-            ensureBorders(bombTank2);
+            //ensureBorders(bombTank2);
         }
 
     }
     //------------------------------------------------------------------------------------------------------//
     //INICIALIZACIÓN DE LOS DIFERENTES OBJETOS QUE SE USARAN EN EL JUEGO.
+
+    //CODIGO QUE AGREGAR
     var tank1 = createObject('tank1', 250, 460, 40, 40);
-    var tank2 = createObject('tank2', 25, 120, 40, 40);
+    var tank2 = createObject('tank2', 25, 80, 40, 40);
     //var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     var bombTank2 = createObject('bombTank2', 0, -120, 5, 5);
+    //CODIGO QUE AGREGAR
+    var obstacle1 = createObject('obstacle1', 100, 150, 80, 40);
+    var obstacle2 = createObject('obstacle2', 300, 150, 80, 40);
+    var obstacle3 = createObject('obstacle3', 200, 250, 80, 40);
     ciclo();
 </script>
-
-</html>
+</html>z
