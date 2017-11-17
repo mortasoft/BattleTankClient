@@ -42,7 +42,6 @@
             height: 10px;
             position: absolute;
         }
-
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -258,15 +257,15 @@
                         //console.log(" element " + element.element + " bomb " + bombTank.element);
                         shotTank1(element, bombTank, destinyElement, countLifeTank, "DOWN");
                     } else if (element.element == "tank2") {
-                      //  console.log("SIIIIIIIIIIIII T2");
+                        //  console.log("SIIIIIIIIIIIII T2");
                         shotTank2(element, bombTank, destinyElement, countLifeTank, "DOWN");
                     }
                 } else if (element.y > positionTank) {
                     if (element.element == "tank1") {
-                    //    console.log("NOOOOOOOO");
+                        //    console.log("NOOOOOOOO");
                         shotTank1(element, bombTank, destinyElement, countLifeTank, "UP");
                     } else if (element.element == "tank2") {
-                  //      console.log("SIIIIIIIIIIIII");
+                        //      console.log("SIIIIIIIIIIIII");
                         shotTank2(element, bombTank, destinyElement, countLifeTank, "UP");
                     }
                     //console.log("Buscando Y >");
@@ -519,7 +518,6 @@
     var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     var bombTank2 = createObject('bombTank2', 0, -120, 5, 5);
     loop();
-
 </script>
 
 </html>
