@@ -80,8 +80,7 @@
     <div id="bombTank1"></div>
     <div id="bombTank2"></div>
     <!--    CODIGO QUE AGREGAR-->
-    <div id="obstacle1">
-    </div>
+    <div id="obstacle1"></div>
     <div id="obstacle2"></div>
     <div id="obstacle3"></div>
     <!--    <div id="tank"></div>-->
@@ -141,11 +140,35 @@
             object.y = 480 - object.h;
         }
     }
+    //CODIGO PARA AGREGAR
+    function ensureObstacles1(object, element) {
+        if (object.y + object.h <= 190 && object.x + object.w >= 100 && object.x + object.w <= 180) {
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        } else if (object.y + object.h <= 190 && object.x + object.w >= 300 && object.x + object.w <= 380) {
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        } else if (object.y + object.h <= 290 && object.x + object.w >= 200 && object.x + object.w <= 280) {
+            console.log("si entro");
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        }
 
-    function ensureObstacles(object) {
-        if (object.y + object.h >= 150 && object.x + object.w >= 100) {
-            bombTank2.x = object.x + 20;
-            bombTank2.y = object.y + object.h;
+    }
+    //CODIGO PARA AGREGAR
+    function ensureObstacles2(object, element) {
+        if (object.y + object.h >= 150 && object.x + object.w >= 100 && object.x + object.w <= 180) {
+            console.log("si entro");
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        } else if (object.y + object.h >= 150 && object.x + object.w >= 300 && object.x + object.w <= 380) {
+            console.log("si entro");
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        } else if (object.y + object.h >= 250 && object.x + object.w >= 200 && object.x + object.w <= 280) {
+            console.log("si entro");
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
         }
     }
     //------------------------------------------------------------------------------------------------------//
@@ -159,9 +182,9 @@
     //FUNCIÓN DE MOSTRAR PARA ASIGNAR TODOS LOS OBJETOS.
     function showObjects() { //actualizar tank1
         setPosition(tank1);
-        //   setPosition(bombTank1);
+        setPosition(bombTank1);
         setPosition(tank2);
-        setPosition(bombTank2);
+        //setPosition(bombTank2);
         //CODIGO QUE AGREGAR
         setPosition(obstacle1);
         setPosition(obstacle2);
@@ -273,6 +296,7 @@
             if (moveShot == "DOWN") {
                 directionShotTank1 = "DOWN";
                 initbombTank1();
+                console.lo("entro en shot");
                 checkCollisionTank(element, bombTank1, destinyElement, countTank);
             } else if (moveShot == "UP") {
                 directionShotTank1 = "UP";
@@ -346,7 +370,7 @@
                 bombTank1.y -= 22;
                 //countLifeTank2 = 0;
             } else if (directionShotTank1 == "DOWN") {
-                //console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
+                console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
                 bombTank2.y += 22;
                 //countLifeTank2 = 0;
             }
@@ -357,13 +381,14 @@
     //LLAMADOS A LAS DIFERENTES FUNCIONES.
     function ciclo() {
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
-            moveTank2();
-            ensureBorders(tank2);
-            ensureObstacles(bombTank2);
+            //moveTank2();
+            //ensureBorders(tank2);
+            moveTank1();
+            ensureBorders(tank1);
             showObjects();
             decideDirectionShot();
             lastLoopRun = new Date().getTime();
-            checkCollisionTank(tank2, bombTank2, tank1, countLifeTank1);
+            //checkCollisionTank(tank2, bombTank2, tank1, countLifeTank1);
         }
         setTimeout('ciclo();', 10);
     }
@@ -378,6 +403,8 @@
             directionShotTank1 = "DOWN";
             showObjects();
             initbombTank2();
+            //CODIGO PARA AGREGAR
+            ensureObstacles2(bombTank2, tank2);
             //ensureBorders(bombTank2);
 
         } else if (loop == 1) {
@@ -385,9 +412,31 @@
             directionShotTank1 = "DOWN";
             showObjects();
             initbombTank2();
+            //CODIGO PARA AGREGAR
+            ensureObstacles2(bombTank2, tank2);
             //ensureBorders(bombTank2);
         }
+    }
 
+    function moveTank1() {
+        //radar(tank2, bombTank1, tank1);
+        loop = Math.floor(Math.random() * 2);
+        if (loop == 0) {
+            //console.log(loop);
+            tank1.x -= 20;
+            directionShotTank1 = "UP";
+            showObjects();
+            initbombTank1();
+            ensureObstacles1(bombTank1, tank1);
+            //ensureBorders(bombTank2);
+        } else if (loop == 1) {
+            tank1.x += 20;
+            directionShotTank1 = "UP";
+            showObjects();
+            initbombTank1();
+            ensureObstacles1(bombTank1, tank1);
+            //ensureBorders(bombTank2);
+        }
     }
     //------------------------------------------------------------------------------------------------------//
     //INICIALIZACIÓN DE LOS DIFERENTES OBJETOS QUE SE USARAN EN EL JUEGO.
@@ -395,7 +444,7 @@
     //CODIGO QUE AGREGAR
     var tank1 = createObject('tank1', 250, 460, 40, 40);
     var tank2 = createObject('tank2', 25, 80, 40, 40);
-    //var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
+    var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     var bombTank2 = createObject('bombTank2', 0, -120, 5, 5);
     //CODIGO QUE AGREGAR
     var obstacle1 = createObject('obstacle1', 100, 150, 80, 40);
