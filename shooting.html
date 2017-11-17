@@ -42,6 +42,7 @@
             height: 10px;
             position: absolute;
         }
+
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -253,12 +254,25 @@
             if (angle == "findY") {
                 if (element.y < positionTank) {
                     //console.log("Buscando Y <");
-                    shot(element, bombTank, destinyElement, countLifeTank, "DOWN");
+                    if (element.element == "tank1") {
+                        //console.log(" element " + element.element + " bomb " + bombTank.element);
+                        shotTank1(element, bombTank, destinyElement, countLifeTank, "DOWN");
+                    } else if (element.element == "tank2") {
+                      //  console.log("SIIIIIIIIIIIII T2");
+                        shotTank2(element, bombTank, destinyElement, countLifeTank, "DOWN");
+                    }
                 } else if (element.y > positionTank) {
-                    shot(element, bombTank, destinyElement, countLifeTank, "UP");
+                    if (element.element == "tank1") {
+                    //    console.log("NOOOOOOOO");
+                        shotTank1(element, bombTank, destinyElement, countLifeTank, "UP");
+                    } else if (element.element == "tank2") {
+                  //      console.log("SIIIIIIIIIIIII");
+                        shotTank2(element, bombTank, destinyElement, countLifeTank, "UP");
+                    }
                     //console.log("Buscando Y >");
                 }
             } else if (angle == "findX") {
+                //PENDIENTE, AQUÍ NO FUNCIONA HASTA AHORA.
                 if (element.x < positionTank) {
                     shot(element, countLifeTank, "RIGHT");
                 } else if (element.x > positionTank) {
@@ -273,34 +287,44 @@
     }
     //------------------------------------------------------------------------------------------------------//
     //EJECUTAR DISPARO DEPENDIENDO DE LA CANTIDAD DE VIDA, Y LA DIRECCIÓN DEL DISPARO.
-    function shot(element, bombTank, destinyElement, countTank, moveShot) {
+    function shotTank1(element, bombTank, destinyElement, countTank, moveShot) {
         if (countTank == 100) {
             //console.log("CONT TANK" + element.element + " " + countTank);
             if (moveShot == "DOWN") {
+                //console.log("ELEMENT " + element.element);
                 directionShotTank1 = "DOWN";
-                directionShotTank2 = "DOWN";
-                console.log("DIRECCIÓN " + directionShotTank2 + " ELEMENT " + element.element + "");
-                if (element.element == "tank1") {
-                    //console.log("ELEMENT " + element.element);
-                    initbombTank1();
-                } else if (element.element == "tank2") {
-                    console.log("ELEMENT " + element.element);
-                    initbombTank2();
-                }
-                checkCollisionTank(element, bombTank, destinyElement, countTank);
+                initbombTank1();
+                checkCollisionTank1(element, bombTank, destinyElement, countTank);
             } else if (moveShot == "UP") {
+                //console.log("ELEMENT " + element.element);
                 directionShotTank1 = "UP";
+                initbombTank1();
+                checkCollisionTank1(element, bombTank, destinyElement, countTank);
+            }
+        } else if (countTank == 50) {
+
+
+        } else if (countTank < 50) {
+
+        }
+    }
+    //------------------------------------------------------------------------------------------------------//
+    //EJECUTAR DISPARO DEPENDIENDO DE LA CANTIDAD DE VIDA, Y LA DIRECCIÓN DEL DISPARO.
+    function shotTank2(element, bombTank, destinyElement, countTank, moveShot) {
+        if (countTank == 100) {
+            //console.log("CONT TANK" + element.element + " " + countTank);
+            if (moveShot == "DOWN") {
+                //console.log("ELEMENT " + element.element + " BOMB " + bombTank.element + " DESTINY " + destinyElement.element);
+                directionShotTank2 = "DOWN";
+                initbombTank2();
+                //console.log("DOWN O " + element.element + " BT " + bombTank.element + " D " + destinyElement.element);
+                checkCollisionTank2(element, bombTank2, tank1, countTank);
+            } else if (moveShot == "UP") {
+                //console.log("ELEMENT " + element.element);
                 directionShotTank2 = "UP";
-                //decideDirectionShotTank1();
-                //console.log("DIRECCIÓN " + directionShotTank1 + " ELEMENT " + element.element + "");
-                if (element.element == "tank1") {
-                    //console.log("ELEMENT " + element.element);
-                    initbombTank1();
-                } else if (element.element == "tank2") {
-                    //console.log("ELEMENT " + element.element);
-                    initbombTank2();
-                }
-                checkCollisionTank(element, bombTank, destinyElement, countTank);
+                initbombTank2();
+                //console.log("UP O " + element.element + " BT " + bombTank.element + " D " + destinyElement.element);
+                checkCollisionTank2(element, bombTank, destinyElement, countTank);
             }
         } else if (countTank == 50) {
 
@@ -327,12 +351,12 @@
     //INICIALIZAR LA POSICIÓN DEL DISPARO DEL TANK2
     function initbombTank2() {
         if (bombTank2.y <= 20) {
-            console.log("Entro y ");
+            //console.log("Entro y ");
             bombTank2.x = tank2.x + 20;
             bombTank2.y = tank2.y + bombTank2.h;
             isShootedTank2 = true;
         } else if (bombTank2.y > 440) {
-            console.log("Entro y cargada b2");
+            //console.log("Entro y cargada b2");
             bombTank2.x = tank2.x + 20;
             bombTank2.y = tank2.y + bombTank2.h;
             isShootedTank2 = true;
@@ -342,22 +366,36 @@
     }
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN QUE PERMITE CHECKEAR SI COLISIONÓ EL OBJETO DE DESTINO. SI ES CIERTO DETIENE EL JUEGO.
-    function checkCollisionTank(element, bombTank1, destinyElement, countTank) {
-        if (intersects(bombTank1, destinyElement)) {
+    function checkCollisionTank1(element, bombTank, destinyElement, countTank) {
+        //console.log("ChCt1 BOMB TANK" + bombTank.element + " DESTINY " + destinyElement.element);
+        if (intersects(bombTank, destinyElement)) {
+            console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
             console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-            if (destinyElement.element == "tank2") {
-                //postLifeTank2(countTank);
-                alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = " + countTank);
-            }
+            //postLifeTank2(countTank);
+            alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + "\nPERDIÓ = " + destinyElement.element + "\nVIDA = " + countTank);
+        }
+
+    }
+    //------------------------------------------------------------------------------------------------------//
+    //FUNCIÓN QUE PERMITE CHECKEAR SI COLISIONÓ EL OBJETO DE DESTINO. SI ES CIERTO DETIENE EL JUEGO.
+    function checkCollisionTank2(element, bombTank, destinyElement, countTank) {
+        //console.log("BOMB TANK " + bombTank.element + " DESTINY " + destinyElement.element);
+        if (intersects(bombTank, destinyElement)) {
+            console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
+            //postLifeTank2(countTank);
+            alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + "\nPERDIÓ = " + destinyElement.element + "\nVIDA = " + countTank);
         } else {
-            //console.log("No ha intersectado");
+            //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
+
         }
     }
+
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN QUE PERMITE INTERSECTAR DOS OBJETOS MEDIANTE TRUE O FALSE EN SU POSICIÓN Y MEDIDA.
     function intersects(a, b) {
-        return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+        return a.x <= b.x + b.w && a.x + a.w >= b.x && a.y <= b.y + b.h && a.y + a.h >= b.y;
     }
+
     //-----------------------------------------------------------------------------------------------x-------//
     //FUNCIÓN DE DECIDIR LA DIRECCIÓN DEL DISPARO CON VARIABLE GLOBAL DIRECCIÓN SHOT TANK1 Y LA VELOCIDAD DE DISPARO.
     function decideDirectionShotTank1() { //
@@ -367,7 +405,7 @@
                 bombTank1.y -= 22;
                 //countLifeTank2 = 0;
             } else if (directionShotTank1 == "DOWN") {
-                console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
+                //console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
                 bombTank1.y += 22;
                 //countLifeTank2 = 0;
             }
@@ -376,17 +414,15 @@
     //-----------------------------------------------------------------------------------------------x-------//
     //FUNCIÓN DE DECIDIR LA DIRECCIÓN DEL DISPARO CON VARIABLE GLOBAL DIRECCIÓN SHOT TANK2 Y LA VELOCIDAD DE DISPARO.
     function decideDirectionShotTank2() { //
-           //   console.log(" count " + countLifeTank1);
+        //   console.log(" count " + countLifeTank1);
         if (countLifeTank1 != 0) {
-            console.log(" count " + countLifeTank1 + " dst2 " + directionShotTank2);
+            //console.log(" count " + countLifeTank2 + " dst2 " + directionShotTank2);
             if (directionShotTank2 == "UP") {
                 //console.log("ESTA EN SHOOTING IT UP\tGRACAS MI SEÑOR!");
                 bombTank2.y -= 22;
-                //countLifeTank2 = 0;
             } else if (directionShotTank2 == "DOWN") {
-                console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
+                //console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
                 bombTank2.y += 22;
-                //countLifeTank2 = 0;
             }
         } else {
             console.log(" count " + countLifeTank1);
@@ -405,13 +441,16 @@
             showObjects();
             decideDirectionShotTank1();
             decideDirectionShotTank2();
+            brainMovesTank2();
+            ensureBorders(tank2);
+            showObjects();
+            //checkCollisionTank2(tank2, bombTank2, tank1, countLifeTank1);
             lastLoopRun = new Date().getTime();
             //radar(tank2, bombTank1);
-            brainMovesTank2();
             //initbombTank2();
             //console.log(" b2 x" + bombTank2.x + " y = " + bombTank2.y);
         }
-        setTimeout('loop();', 400);
+        setTimeout('loop();', 100);
     }
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN DE PIVOT HACÍA EL RADAR QUE EN ESTE CASO HACE RADAR A DISPAROS PROVENIENTES DEL TANK1 o DISPARAR AL OPONENTE.
@@ -475,11 +514,12 @@
     }
     //------------------------------------------------------------------------------------------------------//
     //INICIALIZACIÓN DE LOS DIFERENTES OBJETOS QUE SE USARAN EN EL JUEGO.
-    var tank1 = createObject('tank1', 250, 460, 40, 40);
+    var tank1 = createObject('tank1', 250, 360, 40, 40);
     var tank2 = createObject('tank2', 25, 120, 40, 40);
     var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     var bombTank2 = createObject('bombTank2', 0, -120, 5, 5);
     loop();
+
 </script>
 
 </html>

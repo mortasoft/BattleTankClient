@@ -275,6 +275,7 @@
     function checkCollisionTank(element, bombTank1, destinyElement, countTank) {
         if (intersects(bombTank1, destinyElement)) {
             console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
+
             if (destinyElement.element == "tank2") {
                 //postLifeTank2(countTank);
                 alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + " PERDIÓ = " + destinyElement.element + " VIDA = " + countTank);
