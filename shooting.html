@@ -95,6 +95,7 @@
     <div id="obstacle1"></div>
     <div id="obstacle2"></div>
     <div id="obstacle3"></div>
+    <a href="login.html"><button>Go To Login</button></a>
     <!--    <div id="tank"></div>-->
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -229,6 +230,33 @@
             countLifeTank1 = this;
             countLifeTank1 = data[data.length - 2]['tank1'].life;
             //console.log("GET X = " + xPositionTank1 + " Y = " + yPositionTank1 + " LIFE = " + countLifeTank1);
+        });
+    }
+    //------------------------------------------------------------------------------------------------------//
+    //POST Y GET DE LOS LOG'S DEL BATTLE TANK
+    function postLog(event) {
+        //console.log("postT2X = " + postValueTank2InX + " t2,x = " + tank2.x + " pvT2Y = " + postValueTank2InY + " t2.y " + tank2.y);
+        //console.log(lifeTank2);
+        $.ajax({
+            type: "POST",
+            url: "http://192.168.0.15:5000/api/v1/users/tank/logs",
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({
+                event: event
+            }, null, '\t'),
+            dataType: "json",
+            success: function(data) {
+                console.log("Log registrado");
+            }
+        });
+
+    }
+
+    function getLog() {
+        $.get("http://192.168.0.15:5000/api/v1/users/tank/logs", function(data, status) {
+            xPositionTank2 = this;
+            logEvent = data[data.length - 1].event;
+            console.log("LOG = " + logEvent);
         });
     }
     //------------------------------------------------------------------------------------------------------//
@@ -452,6 +480,7 @@
             console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
             //postLifeTank2(countTank);
             alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + "\nPERDIÓ = " + destinyElement.element + "\nVIDA = " + countTank);
+            postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
         }
 
     }
@@ -463,6 +492,7 @@
             console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
             //postLifeTank2(countTank);
             alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + "\nPERDIÓ = " + destinyElement.element + "\nVIDA = " + countTank);
+            postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
         } else {
             //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
 
