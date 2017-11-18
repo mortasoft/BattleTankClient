@@ -186,7 +186,7 @@
         if (postValueTank2InX != tank2.x || postValueTank2InY != tank2.y || postValueTank2InX == tank2.x || postValueTank2InY == tank2.y || postValueTank1InX != tank1.x || postValueTank1InY != tank1.y || postValueTank1InX == tank1.x || postValueTank1InY == tank1.x) {
             $.ajax({
                 type: "POST",
-                url: "http://192.168.0.15:5000/api/v1/users/tank",
+                url: "http://10.2.2.214:5000/api/v1/users/tank",
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({
                     tank1: {
@@ -214,7 +214,7 @@
     }
 
     function getPositionTank2() {
-        $.get("http://192.168.0.15:5000/api/v1/users/tank", function(data, status) {
+        $.get("http://10.2.2.214:5000/api/v1/users/tank", function(data, status) {
             xPositionTank2 = this;
             xPositionTank2 = data[data.length - 1]['tank2'].x;
             yPositionTank2 = this;
@@ -239,7 +239,7 @@
         //console.log(lifeTank2);
         $.ajax({
             type: "POST",
-            url: "http://192.168.0.15:5000/api/v1/users/tank/logs",
+            url: "http://10.2.2.214:5000/api/v1/users/tank/logs",
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({
                 event: event
@@ -253,7 +253,7 @@
     }
 
     function getLog() {
-        $.get("http://192.168.0.15:5000/api/v1/users/tank/logs", function(data, status) {
+        $.get("http://10.2.2.214:5000/api/v1/users/tank/logs", function(data, status) {
             xPositionTank2 = this;
             logEvent = data[data.length - 1].event;
             console.log("LOG = " + logEvent);
