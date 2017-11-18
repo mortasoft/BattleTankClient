@@ -9,12 +9,14 @@
             margin-right: 200px;
             background-attachment: fixed;
         }
+
         #color {
             background: #8583de;
             width: 400px;
             height: 400px;
             position: absolute;
         }
+
         #tank1 {
             background: #8583de;
             width: 40px;
@@ -55,20 +57,44 @@
             height: 10px;
             position: absolute;
         }
+
+        #obstacle1 {
+            background: #8ECBA2;
+            width: 80px;
+            height: 40px;
+            position: absolute;
+        }
+
+        #obstacle2 {
+            background: #8ECBA2;
+            width: 80px;
+            height: 40px;
+            position: absolute;
+        }
+
+        #obstacle3 {
+            background: #8ECBA2;
+            width: 80px;
+            height: 40px;
+            position: absolute;
+        }
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
 </head>
 
 <body>
-       <div>
-           <h1>BATTLE TANK BY RICARDO PÉREZ</h1>
-       </div>
-        <div id="background"></div>
-        <div id="tank1"></div>
-        <div id="tank2"></div>
-        <div id="bombTank1"></div>
-        <div id="bombTank2"></div>
+    <div>
+        <h1>BATTLE TANK BY RICARDO PÉREZ</h1>
+    </div>
+    <div id="background"></div>
+    <div id="tank1"></div>
+    <div id="tank2"></div>
+    <div id="bombTank1"></div>
+    <div id="bombTank2"></div>
+    <div id="obstacle1"></div>
+    <div id="obstacle2"></div>
+    <div id="obstacle3"></div>
     <!--    <div id="tank"></div>-->
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -147,6 +173,9 @@
         setPosition(bombTank1);
         setPosition(tank2);
         setPosition(bombTank2);
+        setPosition(obstacle1);
+        setPosition(obstacle2);
+        setPosition(obstacle3);
     }
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DEL TANK2
@@ -309,11 +338,13 @@
                 //console.log("ELEMENT " + element.element);
                 directionShotTank1 = "DOWN";
                 initbombTank1();
+                ensureObstacles1(bombTank, element);
                 checkCollisionTank1(element, bombTank, destinyElement, countTank);
             } else if (moveShot == "UP") {
                 //console.log("ELEMENT " + element.element);
                 directionShotTank1 = "UP";
                 initbombTank1();
+                ensureObstacles1(bombTank, element);
                 checkCollisionTank1(element, bombTank, destinyElement, countTank);
             }
         } else if (countTank == 50) {
@@ -332,12 +363,14 @@
                 //console.log("ELEMENT " + element.element + " BOMB " + bombTank.element + " DESTINY " + destinyElement.element);
                 directionShotTank2 = "DOWN";
                 initbombTank2();
+                ensureObstacles2(bombTank, element);
                 //console.log("DOWN O " + element.element + " BT " + bombTank.element + " D " + destinyElement.element);
                 checkCollisionTank2(element, bombTank2, tank1, countTank);
             } else if (moveShot == "UP") {
                 //console.log("ELEMENT " + element.element);
                 directionShotTank2 = "UP";
                 initbombTank2();
+                ensureObstacles2(bombTank, element);
                 //console.log("UP O " + element.element + " BT " + bombTank.element + " D " + destinyElement.element);
                 checkCollisionTank2(element, bombTank, destinyElement, countTank);
             }
@@ -377,6 +410,37 @@
             isShootedTank2 = true;
         } else {
             //console.log("no está entrando");
+        }
+    }
+    //ASEGURAR OBSTACULOS DEL LADO DEL TANK1
+    function ensureObstacles1(object, element) {
+        if (object.y + object.h <= 190 && object.x + object.w >= 100 && object.x + object.w <= 180) {
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        } else if (object.y + object.h <= 190 && object.x + object.w >= 300 && object.x + object.w <= 380) {
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        } else if (object.y + object.h <= 290 && object.x + object.w >= 200 && object.x + object.w <= 280) {
+            console.log("si entro");
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        }
+
+    }
+    //ASEGURAR OBSTACULOS DEL LADO DEL TANK2
+    function ensureObstacles2(object, element) {
+        if (object.y + object.h >= 150 && object.x + object.w >= 100 && object.x + object.w <= 180) {
+            console.log("si entro");
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        } else if (object.y + object.h >= 150 && object.x + object.w >= 300 && object.x + object.w <= 380) {
+            console.log("si entro");
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
+        } else if (object.y + object.h >= 250 && object.x + object.w >= 200 && object.x + object.w <= 280) {
+            console.log("si entro");
+            object.x = element.x + 20;
+            object.y = element.y + element.h;
         }
     }
     //------------------------------------------------------------------------------------------------------//
@@ -465,7 +529,7 @@
             //initbombTank2();
             //console.log(" b2 x" + bombTank2.x + " y = " + bombTank2.y);
         }
-        setTimeout('loop();', 100);
+        setTimeout('loop();', 400);
     }
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN DE PIVOT HACÍA EL RADAR QUE EN ESTE CASO HACE RADAR A DISPAROS PROVENIENTES DEL TANK1 o DISPARAR AL OPONENTE.
@@ -529,10 +593,13 @@
     }
     //------------------------------------------------------------------------------------------------------//
     //INICIALIZACIÓN DE LOS DIFERENTES OBJETOS QUE SE USARAN EN EL JUEGO.
-    var tank1 = createObject('tank1', 250, 360, 40, 40);
-    var tank2 = createObject('tank2', 25, 120, 40, 40);
+    var tank1 = createObject('tank1', 250, 460, 40, 40);
+    var tank2 = createObject('tank2', 25, 80, 40, 40);
     var bombTank1 = createObject('bombTank1', 0, -120, 5, 5);
     var bombTank2 = createObject('bombTank2', 0, -120, 5, 5);
+    var obstacle1 = createObject('obstacle1', 100, 150, 80, 40);
+    var obstacle2 = createObject('obstacle2', 300, 150, 80, 40);
+    var obstacle3 = createObject('obstacle3', 200, 250, 80, 40);
     loop();
 </script>
 
