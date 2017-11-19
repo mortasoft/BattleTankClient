@@ -78,7 +78,6 @@
             height: 40px;
             position: absolute;
         }
-
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -115,7 +114,12 @@
     //CONTADOR DE PORCENTAJE DE VIDA DEL TANK1 Y 2
     var percentageLifeTank2 = 100;
     var percentageLifeTank1 = 100;
-
+    //VAR DE CALIBRES MEDIO
+    var percentage_life2_tank1 = 100;
+    var percentage_life2_tank2 = 100;
+    //VAR DE CALIBRES BAJO.
+    var percentage_life3_tank1 = 100;
+    var percentage_life3_tank2 = 100;
     var postValueTank2InX = "";
     var postValueTank2InY = "";
 
@@ -181,10 +185,12 @@
         setPosition(obstacle3);
     }
     //------------------------------------------------------------------------------------------------------//
-    //POST Y GET DEL TANK2
-    function postPositionAndLifeOfTanks(lifeTank1, lifeTank2) {
+    //POST Y GET DE LA POSICIÓN DEL TANK1 Y 2.
+    function postPositionOfTanks() {
         //console.log("postT2X = " + postValueTank2InX + " t2,x = " + tank2.x + " pvT2Y = " + postValueTank2InY + " t2.y " + tank2.y);
         //console.log(lifeTank2);
+
+        //PENDIENTE DE UN POSIBLE BUG SI NO PUEDES HACER EL POST CUANDO INTERSECTE LA VIDA.
         if (postValueTank2InX != tank2.x || postValueTank2InY != tank2.y || postValueTank2InX == tank2.x || postValueTank2InY == tank2.y || postValueTank1InX != tank1.x || postValueTank1InY != tank1.y || postValueTank1InX == tank1.x || postValueTank1InY == tank1.x) {
             $.ajax({
                 type: "POST",
@@ -192,14 +198,12 @@
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({
                     tank1: {
-                        x: tank1.x,
-                        y: tank1.y,
-                        percentage_t1: percentageLifeTank1
+                        x_t1: tank1.x,
+                        y_t1: tank1.y
                     },
                     tank2: {
-                        x: tank2.x,
-                        y: tank2.y,
-                        percentage_t2: percentageLifeTank2
+                        x_t2: tank2.x,
+                        y_t2: tank2.y
                     }
                 }, null, '\t'),
                 dataType: "json",
@@ -221,21 +225,61 @@
             xPositionTank2 = data[data.length - 1]['tank2'].x;
             yPositionTank2 = this;
             yPositionTank2 = data[data.length - 1]['tank2'].y;
-            percentageLifeTank2 = this;
-            percentageLifeTank2 = data[data.length - 1]['tank2'].life;
-            //console.log("GET X = " + xPositionTank2 + " Y = " + yPositionTank2 + " LIFE = " + percentageLifeTank2);
+            //console.log("GET T2 X = " + xPositionTank2 + " Y = " + yPositionTank2);
 
             xPositionTank1 = this;
             xPositionTank1 = data[data.length - 2]['tank1'].x;
             yPositionTank1 = this;
             yPositionTank1 = data[data.length - 2]['tank1'].y;
-            percentageLifeTank1 = this;
-            percentageLifeTank1 = data[data.length - 2]['tank1'].life;
-            //console.log("GET X = " + xPositionTank1 + " Y = " + yPositionTank1 + " LIFE = " + percentageLifeTank1);
+            //console.log("GET T1 X = " + xPositionTank1 + " Y = " + yPositionTank1);
         });
     }
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DE LAS CANTIDADES DE VIDA DE LOS DOS TANQUES DEL BATTLE TANK
+    //------------------------------------------------------------------------------------------------------//
+    //POST Y GET DEL TANK2
+    function postlivesOfTanks(lifeOfTank1, percentageTank1, lifeOfTank2, percentageTank2) {
+        $.ajax({
+            type: "POST",
+            url: "http://192.168.0.15:5000/api/v1/users/tank/lives",
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({
+                tank1: {
+                    percentage_t1: percentageLifeTank1,
+                    lives_t1: countLivesTank1
+                },
+                tank2: {
+                    percentage_t2: percentageLifeTank2,
+                    lives_t2: countLivesTank2
+                }
+            }, null, '\t'),
+            dataType: "json",
+            success: function(data) {
+                //   console.log("Posición del tank 2 actualizada");
+            }
+        });
+        postValueTank2InX = tank2.x;
+        postValueTank2InY = tank2.y;
+        //console.log("PVT2x = " + postValueTank2InX + " PVT2y = " + postValueTank2InY);
+    }
+
+    //TODO: LLAMAR FUNCION
+    function getLiveTank2() {
+        //console.log("Confio en el Señor");
+        $.get("http://192.168.0.15:5000/api/v1/users/tank/lives", function(data, status) {
+            percentageLifeTank2 = this;
+            percentageLifeTank2 = data[data.length - 1]['tank2'].percentage_t2;
+            countLivesTank2 = this;
+            countLivesTank2 = data[data.length - 1]['tank2'].lives_t2;
+            console.log(" LIFE = " + percentageLifeTank2 + " COUNTLIVEST2 " + countLivesTank2);
+
+            percentageLifeTank1 = this;
+            percentageLifeTank1 = data[data.length - 2]['tank1'].percentage_t1;
+            countLivesTank1 = this;
+            countLivesTank1 = data[data.length - 2]['tank1'].lives_t1;
+            console.log(" LIFE = " + percentageLifeTank1 + " COUNTLIVEST1 " + countLivesTank1);
+        });
+    }
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DE LOS LOG'S DEL BATTLE TANK
     function postLog(event) {
@@ -435,7 +479,7 @@
             bombTank2.x = tank2.x + 20;
             bombTank2.y = tank2.y + bombTank2.h;
             isShootedTank2 = true;
-        } else if (bombTank2.y > 440) {
+        } else if (bombTank2.y > 460) {
             //console.log("Entro y cargada b2");
             bombTank2.x = tank2.x + 20;
             bombTank2.y = tank2.y + bombTank2.h;
@@ -492,14 +536,20 @@
     //FUNCIÓN QUE PERMITE CHECKEAR SI COLISIONÓ EL OBJETO DE DESTINO. SI ES CIERTO DETIENE EL JUEGO.
     function checkCollisionTank2(element, bombTank, destinyElement, countTank) {
         //console.log("BOMB TANK " + bombTank.element + " DESTINY " + destinyElement.element);
-        if (intersects(bombTank, destinyElement)) {
-            console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-            //postLifeTank2(countTank);
-            alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + "\nPERDIÓ = " + destinyElement.element + "\nVIDA = " + countTank);
-            postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
-        } else {
-            //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
 
+
+        //TODO: AGREGAR VARIABLE DE TIPO DE DAÑO PARA BAJAR EN EL JSON Y SEGUIR EL JUEGO.
+        //VALIDAMOS SI EL ADVERSARIO TIENE 3 VIDAS ENTONCES LE QUITAREMOS EL 100% DE ESA VIDA. SI TIENE 2,
+        //LE QUITAREMOS EL 50% CON CALIBRE MEDIO. SI TIENE 1 LE QUITAREMOS 25%.
+        if (countLivesTank1 == 3) {
+            if (intersects(bombTank, destinyElement)) {
+                console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
+                alert("¡TERMINO EL JUEGO!\nGANO = " + element.element + "\nPERDIO = " + destinyElement.element + "\nVIDA = " + countTank);
+                postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
+
+            } else {
+                //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
+            }
         }
     }
 
@@ -512,7 +562,7 @@
     //-----------------------------------------------------------------------------------------------x-------//
     //FUNCIÓN DE DECIDIR LA DIRECCIÓN DEL DISPARO CON VARIABLE GLOBAL DIRECCIÓN SHOT TANK1 Y LA VELOCIDAD DE DISPARO.
     function decideDirectionShotTank1() { //
-        if (percentageLifeTank2 != 0) {
+        if (countLivesTank1 != 0) {
             if (directionShotTank1 == "UP") {
                 //console.log("ESTA EN SHOOTING IT UP\tGRACAS MI SEÑOR!");
                 bombTank1.y -= 22;
@@ -528,7 +578,7 @@
     //FUNCIÓN DE DECIDIR LA DIRECCIÓN DEL DISPARO CON VARIABLE GLOBAL DIRECCIÓN SHOT TANK2 Y LA VELOCIDAD DE DISPARO.
     function decideDirectionShotTank2() { //
         //   console.log(" count " + percentageLifeTank1);
-        if (percentageLifeTank1 != 0) {
+        if (countLivesTank2 != 0) {
             //console.log(" count " + percentageLifeTank2 + " dst2 " + directionShotTank2);
             if (directionShotTank2 == "UP") {
                 //console.log("ESTA EN SHOOTING IT UP\tGRACAS MI SEÑOR!");
@@ -547,8 +597,9 @@
     function loop() {
         if (new Date().getTime() - lastLoopRun > 40) { //CONDICIÓN PARA HACER EL CICLO
             //console.log(" b1 x" + bombTank1.x + " y = " + bombTank1.y);
-            postPositionAndLifeOfTanks(percentageLifeTank2, percentageLifeTank1); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
+            postPositionOfTanks(); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
             getPositionTank2(); //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
+            getLiveTank2();
             brainMovesTank1();
             ensureBorders(tank1);
             showObjects();
@@ -563,7 +614,7 @@
             //initbombTank2();
             //console.log(" b2 x" + bombTank2.x + " y = " + bombTank2.y);
         }
-        setTimeout('loop();', 400);
+        setTimeout('loop();', 200);
     }
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN DE PIVOT HACÍA EL RADAR QUE EN ESTE CASO HACE RADAR A DISPAROS PROVENIENTES DEL TANK1 o DISPARAR AL OPONENTE.
@@ -636,7 +687,6 @@
     var obstacle2 = createObject('obstacle2', 300, 150, 80, 40);
     var obstacle3 = createObject('obstacle3', 200, 250, 80, 40);
     loop();
-
 </script>
 
 </html>
