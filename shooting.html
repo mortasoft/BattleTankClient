@@ -78,6 +78,7 @@
             height: 40px;
             position: absolute;
         }
+
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -235,49 +236,64 @@
         });
     }
     //------------------------------------------------------------------------------------------------------//
-    //POST Y GET DE LAS CANTIDADES DE VIDA DE LOS DOS TANQUES DEL BATTLE TANK
-    //------------------------------------------------------------------------------------------------------//
-    //POST Y GET DEL TANK2
-    function postlivesOfTanks(lifeOfTank1, percentageTank1, lifeOfTank2, percentageTank2) {
+    //POST Y GET DE LAS CANTIDADES DE VIDA DEl TANK1 DEL BATTLE TANK
+    function postlivesOfTank1(lifeOfTank1, percentageTank1) {
         $.ajax({
             type: "POST",
-            url: "http://192.168.0.15:5000/api/v1/users/tank/lives",
+            url: "http://192.168.0.15:5000/api/v1/users/tank/tank1/lives",
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({
                 tank1: {
-                    percentage_t1: percentageLifeTank1,
-                    lives_t1: countLivesTank1
-                },
-                tank2: {
-                    percentage_t2: percentageLifeTank2,
-                    lives_t2: countLivesTank2
+                    lives_t1: lifeOfTank1,
+                    percentage_t1: percentageTank1
                 }
             }, null, '\t'),
             dataType: "json",
             success: function(data) {
-                //   console.log("Posición del tank 2 actualizada");
+                console.log("Vidas actualizada DEL T1, gracias al Señor!");
             }
         });
-        postValueTank2InX = tank2.x;
-        postValueTank2InY = tank2.y;
-        //console.log("PVT2x = " + postValueTank2InX + " PVT2y = " + postValueTank2InY);
+        //console.log("PVT2x = " + percentageTank1 + " PVT2y = " + percentageTank2 + " LIVT1 " + lifeOfTank1 + " LIVT2 " + lifeOfTank2);
     }
 
-    //TODO: LLAMAR FUNCION
-    function getLiveTank2() {
+    function getLivesOfTank1() {
         //console.log("Confio en el Señor");
-        $.get("http://192.168.0.15:5000/api/v1/users/tank/lives", function(data, status) {
+        $.get("http://192.168.0.15:5000/api/v1/users/tank/tank1/lives", function(data, status) {
+            percentageLifeTank1 = this;
+            percentageLifeTank1 = data[data.length - 1]['tank1'].percentage_t1;
+            countLivesTank1 = this;
+            countLivesTank1 = data[data.length - 1]['tank1'].lives_t1;
+        });
+    }
+    //------------------------------------------------------------------------------------------------------//
+    //POST Y GET DE LAS CANTIDADES DE VIDA DEl TANK1 DEL BATTLE TANK
+    function postlivesOfTank2(lifeOfTank2, percentageTank2) {
+        $.ajax({
+            type: "POST",
+            url: "http://192.168.0.15:5000/api/v1/users/tank/tank2/lives",
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({
+                tank2: {
+                    lives_t2: lifeOfTank2,
+                    percentage_t2: percentageTank2
+                }
+            }, null, '\t'),
+            dataType: "json",
+            success: function(data) {
+                console.log("Vidas actualizada DEL T2, gracias al Señor!");
+            }
+        });
+        //console.log("LIVT1 " + lifeOfTank1 + " LIVT2 " + lifeOfTank2);
+    }
+
+    function getLivesOfTank2() {
+        //console.log("Confio en el Señor");
+        $.get("http://192.168.0.15:5000/api/v1/users/tank/tank2/lives", function(data, status) {
             percentageLifeTank2 = this;
             percentageLifeTank2 = data[data.length - 1]['tank2'].percentage_t2;
             countLivesTank2 = this;
             countLivesTank2 = data[data.length - 1]['tank2'].lives_t2;
-            console.log(" LIFE = " + percentageLifeTank2 + " COUNTLIVEST2 " + countLivesTank2);
-
-            percentageLifeTank1 = this;
-            percentageLifeTank1 = data[data.length - 2]['tank1'].percentage_t1;
-            countLivesTank1 = this;
-            countLivesTank1 = data[data.length - 2]['tank1'].lives_t1;
-            console.log(" LIFE = " + percentageLifeTank1 + " COUNTLIVEST1 " + countLivesTank1);
+            console.log(" LIFET1 = " + percentageLifeTank1 + " COUNTLIVEST1 " + countLivesTank1 + " LIFET2 = " + percentageLifeTank2 + " COUNTLIVEST2 " + countLivesTank2);
         });
     }
     //------------------------------------------------------------------------------------------------------//
@@ -497,7 +513,7 @@
             object.x = element.x + 20;
             object.y = element.y + element.h;
         } else if (object.y + object.h <= 290 && object.x + object.w >= 200 && object.x + object.w <= 280) {
-            console.log("si entro");
+            //console.log("si entro");
             object.x = element.x + 20;
             object.y = element.y + element.h;
         }
@@ -506,15 +522,15 @@
     //ASEGURAR OBSTACULOS DEL LADO DEL TANK2
     function ensureObstacles2(object, element) {
         if (object.y + object.h >= 150 && object.x + object.w >= 100 && object.x + object.w <= 180) {
-            console.log("si entro");
+            //console.log("si entro");
             object.x = element.x + 20;
             object.y = element.y + element.h;
         } else if (object.y + object.h >= 150 && object.x + object.w >= 300 && object.x + object.w <= 380) {
-            console.log("si entro");
+            //console.log("si entro");
             object.x = element.x + 20;
             object.y = element.y + element.h;
         } else if (object.y + object.h >= 250 && object.x + object.w >= 200 && object.x + object.w <= 280) {
-            console.log("si entro");
+            //console.log("si entro");
             object.x = element.x + 20;
             object.y = element.y + element.h;
         }
@@ -523,35 +539,49 @@
     //FUNCIÓN QUE PERMITE CHECKEAR SI COLISIONÓ EL OBJETO DE DESTINO. SI ES CIERTO DETIENE EL JUEGO.
     function checkCollisionTank1(element, bombTank, destinyElement, countTank) {
         //console.log("ChCt1 BOMB TANK" + bombTank.element + " DESTINY " + destinyElement.element);
+        //TODO: DESCOMENTAR LOS LOG'S METHOD. //postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
         if (intersects(bombTank, destinyElement)) {
-            console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
-            console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-            //postLifeTank2(countTank);
-            alert("¡TERMINÓ EL JUEGO!\nGANÓ = " + element.element + "\nPERDIÓ = " + destinyElement.element + "\nVIDA = " + countTank);
-            postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
+            if (countLivesTank2 == 3) {
+                console.log("COUNT LT2 = " + countLivesTank2);
+                postlivesOfTank2(3, 100); //ACTUALIZARÁ EN EL BACK-END A VIDA 2 CON 100%
+                getLivesOfTank2();
+                console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
+                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "] TANK2 = [2]");
+            } else if (countLivesTank2 == 2 && percentageLifeTank2 == 100) {
+                postlivesOfTank2(2, 50); //ACTUALIZA A VIDA 2 CON 50 DE %.
+                //modifica esto
+                getLivesOfTank2();
+                console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
+                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] TANK2 = [2] - [50%]");
+            }
+        } else {
+            //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
         }
 
     }
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN QUE PERMITE CHECKEAR SI COLISIONÓ EL OBJETO DE DESTINO. SI ES CIERTO DETIENE EL JUEGO.
     function checkCollisionTank2(element, bombTank, destinyElement, countTank) {
-        //console.log("BOMB TANK " + bombTank.element + " DESTINY " + destinyElement.element);
-
-
-        //TODO: AGREGAR VARIABLE DE TIPO DE DAÑO PARA BAJAR EN EL JSON Y SEGUIR EL JUEGO.
-        //VALIDAMOS SI EL ADVERSARIO TIENE 3 VIDAS ENTONCES LE QUITAREMOS EL 100% DE ESA VIDA. SI TIENE 2,
-        //LE QUITAREMOS EL 50% CON CALIBRE MEDIO. SI TIENE 1 LE QUITAREMOS 25%.
-        if (countLivesTank1 == 3) {
-            if (intersects(bombTank, destinyElement)) {
+        //TODO: AGREGAR VARIABLE DE TIPO DE DAÑO PARA BAJAR EN EL JSON Y SEGUIR EL JUEGO. VALIDAMOS SI EL ADVERSARIO TIENE 3 VIDAS ENTONCES LE QUITAREMOS EL 100% DE ESA VIDA. SI TIENE 2, LE QUITAREMOS EL 50% CON CALIBRE MEDIO. SI TIENE 1 LE QUITAREMOS 25%.
+        //TODO: DESCOMENTAR LOS LOG'S METHOD. //postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
+        if (intersects(bombTank, destinyElement)) {
+            if (countLivesTank1 == 3) {
+                console.log("COUNT LT1 = " + countLivesTank1);
+                postlivesOfTank1(3, 100);
+                getLivesOfTank1();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-                alert("¡TERMINO EL JUEGO!\nGANO = " + element.element + "\nPERDIO = " + destinyElement.element + "\nVIDA = " + countTank);
-                postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
-
-            } else {
-                //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
+                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "] TANK2 = [2]");
+            } else if (countLivesTank1 == 2 && percentageLifeTank1 == 100) {
+                postlivesOfTank1(2, 50);
+                getLivesOfTank1();
+                console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
+                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [2]-[50%] TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%]");
             }
+        } else {
+            //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
         }
     }
+
 
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN QUE PERMITE INTERSECTAR DOS OBJETOS MEDIANTE TRUE O FALSE EN SU POSICIÓN Y MEDIDA.
@@ -565,12 +595,10 @@
         if (countLivesTank1 != 0) {
             if (directionShotTank1 == "UP") {
                 //console.log("ESTA EN SHOOTING IT UP\tGRACAS MI SEÑOR!");
-                bombTank1.y -= 22;
-                //percentageLifeTank2 = 0;
+                bombTank1.y -= 32;
             } else if (directionShotTank1 == "DOWN") {
                 //console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
-                bombTank1.y += 22;
-                //percentageLifeTank2 = 0;
+                bombTank1.y += 32;
             }
         }
     }
@@ -582,10 +610,10 @@
             //console.log(" count " + percentageLifeTank2 + " dst2 " + directionShotTank2);
             if (directionShotTank2 == "UP") {
                 //console.log("ESTA EN SHOOTING IT UP\tGRACAS MI SEÑOR!");
-                bombTank2.y -= 22;
+                bombTank2.y -= 32;
             } else if (directionShotTank2 == "DOWN") {
                 //console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
-                bombTank2.y += 22;
+                bombTank2.y += 32;
             }
         } else {
             console.log(" count " + percentageLifeTank1);
@@ -599,7 +627,8 @@
             //console.log(" b1 x" + bombTank1.x + " y = " + bombTank1.y);
             postPositionOfTanks(); //ENVIA LA POSICIÓN DEL TANK2 AL SERVER.
             getPositionTank2(); //RECIBE LA POSICIÓN DEL TANK2 AL SERVER.
-            getLiveTank2();
+            getLivesOfTank1();
+            getLivesOfTank2();
             brainMovesTank1();
             ensureBorders(tank1);
             showObjects();
@@ -614,7 +643,7 @@
             //initbombTank2();
             //console.log(" b2 x" + bombTank2.x + " y = " + bombTank2.y);
         }
-        setTimeout('loop();', 200);
+        setTimeout('loop();', 300);
     }
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN DE PIVOT HACÍA EL RADAR QUE EN ESTE CASO HACE RADAR A DISPAROS PROVENIENTES DEL TANK1 o DISPARAR AL OPONENTE.
@@ -687,6 +716,7 @@
     var obstacle2 = createObject('obstacle2', 300, 150, 80, 40);
     var obstacle3 = createObject('obstacle3', 200, 250, 80, 40);
     loop();
+
 </script>
 
 </html>
