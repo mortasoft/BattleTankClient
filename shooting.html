@@ -78,7 +78,6 @@
             height: 40px;
             position: absolute;
         }
-
     </style>
     <meta charset="UTF-8">
     <title>BattleTank</title>
@@ -424,54 +423,40 @@
     //------------------------------------------------------------------------------------------------------//
     //EJECUTAR DISPARO DEPENDIENDO DE LA CANTIDAD DE VIDA, Y LA DIRECCIÓN DEL DISPARO.
     function shotTank1(element, bombTank, destinyElement, countTank, moveShot) {
-        if (countTank == 100) {
-            //console.log("CONT TANK" + element.element + " " + countTank);
-            if (moveShot == "DOWN") {
-                //console.log("ELEMENT " + element.element);
-                directionShotTank1 = "DOWN";
-                initbombTank1();
-                ensureObstacles1(bombTank, element);
-                checkCollisionTank1(element, bombTank, destinyElement, countTank);
-            } else if (moveShot == "UP") {
-                //console.log("ELEMENT " + element.element);
-                directionShotTank1 = "UP";
-                initbombTank1();
-                ensureObstacles1(bombTank, element);
-                checkCollisionTank1(element, bombTank, destinyElement, countTank);
-            }
-        } else if (countTank == 50) {
-
-
-        } else if (countTank < 50) {
-
+        console.log("CONT TANK" + element.element + " " + countTank);
+        if (moveShot == "DOWN") {
+            //console.log("ELEMENT " + element.element);
+            directionShotTank1 = "DOWN";
+            initbombTank1();
+            ensureObstacles1(bombTank, element);
+            checkCollisionTank1(element, bombTank, destinyElement, countTank);
+        } else if (moveShot == "UP") {
+            //console.log("ELEMENT " + element.element);
+            directionShotTank1 = "UP";
+            initbombTank1();
+            ensureObstacles1(bombTank, element);
+            checkCollisionTank1(element, bombTank, destinyElement, countTank);
         }
     }
     //------------------------------------------------------------------------------------------------------//
     //EJECUTAR DISPARO DEPENDIENDO DE LA CANTIDAD DE VIDA, Y LA DIRECCIÓN DEL DISPARO.
     function shotTank2(element, bombTank, destinyElement, countTank, moveShot) {
-        if (countTank == 100) {
-            //console.log("CONT TANK" + element.element + " " + countTank);
-            if (moveShot == "DOWN") {
-                //console.log("ELEMENT " + element.element + " BOMB " + bombTank.element + " DESTINY " + destinyElement.element);
-                directionShotTank2 = "DOWN";
-                initbombTank2();
-                ensureObstacles2(bombTank, element);
-                //console.log("DOWN O " + element.element + " BT " + bombTank.element + " D " + destinyElement.element);
-                checkCollisionTank2(element, bombTank2, tank1, countTank);
-            } else if (moveShot == "UP") {
-                //console.log("ELEMENT " + element.element);
-                directionShotTank2 = "UP";
-                initbombTank2();
-                ensureObstacles2(bombTank, element);
-                //console.log("UP O " + element.element + " BT " + bombTank.element + " D " + destinyElement.element);
-                checkCollisionTank2(element, bombTank, destinyElement, countTank);
-            }
-        } else if (countTank == 50) {
-
-
-        } else if (countTank < 50) {
-
+        if (moveShot == "DOWN") {
+            //console.log("ELEMENT " + element.element + " BOMB " + bombTank.element + " DESTINY " + destinyElement.element);
+            directionShotTank2 = "DOWN";
+            initbombTank2();
+            ensureObstacles2(bombTank, element);
+            //console.log("DOWN O " + element.element + " BT " + bombTank.element + " D " + destinyElement.element);
+            checkCollisionTank2(element, bombTank2, tank1, countTank);
+        } else if (moveShot == "UP") {
+            //console.log("ELEMENT " + element.element);
+            directionShotTank2 = "UP";
+            initbombTank2();
+            ensureObstacles2(bombTank, element);
+            //console.log("UP O " + element.element + " BT " + bombTank.element + " D " + destinyElement.element);
+            checkCollisionTank2(element, bombTank, destinyElement, countTank);
         }
+
     }
     //------------------------------------------------------------------------------------------------------//
     //INICIALIZAR LA POSICIÓN DEL DISPARO DEL TANK1
@@ -548,11 +533,15 @@
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "] TANK2 = [2]");
             } else if (countLivesTank2 == 2 && percentageLifeTank2 == 100) {
-                postlivesOfTank2(2, 50); //ACTUALIZA A VIDA 2 CON 50 DE %.
-                //modifica esto
+                postlivesOfTank2(2, 50); //ACTUALIZA A VIDA 2 DE 100% A 50 DE %.
                 getLivesOfTank2();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] TANK2 = [2] - [50%]");
+            } else if (countLivesTank2 == 2 && percentageLifeTank2 == 50) {
+                postlivesOfTank2(1, 100);
+                getLivesOfTank2();
+                console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
+                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] TANK2 = [1] - [100%]");
             }
         } else {
             //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
@@ -567,15 +556,21 @@
         if (intersects(bombTank, destinyElement)) {
             if (countLivesTank1 == 3) {
                 console.log("COUNT LT1 = " + countLivesTank1);
-                postlivesOfTank1(3, 100);
+                postlivesOfTank1(3, 100); //ACTUALIZARÁ EN EL BACK-END A VIDA 2 CON 100%
                 getLivesOfTank1();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "] TANK2 = [2]");
             } else if (countLivesTank1 == 2 && percentageLifeTank1 == 100) {
-                postlivesOfTank1(2, 50);
+                postlivesOfTank1(2, 50); //ACTUALIZA A VIDA 2 DE 100% A 50 DE %.
                 getLivesOfTank1();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [2]-[50%] TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%]");
+            } else if (countLivesTank1 == 2 && percentageLifeTank1 == 50) {
+                postlivesOfTank1(1, 100); //ACTUALIZA A VIDA 2 DE 50% A VIDA 1 CON 100%.
+                getLivesOfTank1();
+                console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
+                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [1]-[100%] TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%]");
+
             }
         } else {
             //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
@@ -716,7 +711,6 @@
     var obstacle2 = createObject('obstacle2', 300, 150, 80, 40);
     var obstacle3 = createObject('obstacle3', 200, 250, 80, 40);
     loop();
-
 </script>
 
 </html>
