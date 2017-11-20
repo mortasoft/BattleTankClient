@@ -153,7 +153,6 @@
 
     //------------------------------------------------------------------------------------------------------//
     //ASEGURAR BORDES CON LOS OBJETOS QUE SE PASEN COMO PARÁMETRO.
-
     function ensureBorders(object) {
         if (object.x <= 20) {
             object.x = 20;
@@ -233,7 +232,7 @@
         });
     }
     //------------------------------------------------------------------------------------------------------//
-    //POST Y GET DE LAS CANTIDADES DE VIDA DEl TANK1 DEL BATTLE TANK
+    //POST Y GET DE LA CANTIDAD DE VIDA DEL TANK1 DEL BATTLE TANK
     function postlivesOfTank1(lifeOfTank1, percentageTank1) {
         $.ajax({
             type: "POST",
@@ -254,7 +253,6 @@
     }
 
     function getLivesOfTank1() {
-        //console.log("Confio en el Señor");
         $.get("http://192.168.0.15:5000/api/v1/users/tank/tank1/lives", function(data, status) {
             percentageLifeTank1 = this;
             percentageLifeTank1 = data[data.length - 1]['tank1'].percentage_t1;
@@ -284,7 +282,6 @@
     }
 
     function getLivesOfTank2() {
-        //console.log("Confio en el Señor");
         $.get("http://192.168.0.15:5000/api/v1/users/tank/tank2/lives", function(data, status) {
             percentageLifeTank2 = this;
             percentageLifeTank2 = data[data.length - 1]['tank2'].percentage_t2;
@@ -296,8 +293,6 @@
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DE LOS LOG'S DEL BATTLE TANK
     function postLog(event) {
-        //console.log("postT2X = " + postValueTank2InX + " t2,x = " + tank2.x + " pvT2Y = " + postValueTank2InY + " t2.y " + tank2.y);
-        //console.log(lifeTank2);
         $.ajax({
             type: "POST",
             url: "http://192.168.0.15:5000/api/v1/users/tank/logs",
@@ -310,7 +305,6 @@
                 console.log("Log registrado");
             }
         });
-
     }
 
     function getLog() {
@@ -354,13 +348,9 @@
         if (xPositionTank1 != "Waiting" && yPositionTank1 != "Waiting") {
             //console.log("x POSITION TANK " + xPositionTank2 + " Y POSITION TANK = " + yPositionTank2);
             if (tank2.x > xPositionTank1 && tank2.y != yPositionTank1) {
-                //console.log(" t2 mayor en x");
-                //tank2.x -= tank2.x - xPositionTank1;
                 showObjects();
                 decideShot("findY", tank2, bombTank2, tank1, yPositionTank1, percentageLifeTank1);
             } else if (tank2.x < xPositionTank1 && tank2.y != yPositionTank1) {
-                //console.log(" t2 menor en x");
-                //tank2.x += xPositionTank1 - tank2.x;
                 showObjects();
                 decideShot("findY", tank2, bombTank2, tank1, yPositionTank1, percentageLifeTank1);
             } else if (tank2.y > yPositionTank1 && tank2.x != xPositionTank1) {
@@ -382,7 +372,6 @@
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN DE DECIDIR DONDE SERÁ LA DIRECCIÓN DEL DISPARO
     function decideShot(angle, element, bombTank, destinyElement, positionTank, countLifeTank) {
-        //console.log("DECIDE SHOT TIENE COUNT LIFE TANK = " + countLifeTank);
         if (angle == "findY") {
             if (element.y < positionTank) {
                 //console.log("Buscando Y <");
@@ -411,12 +400,10 @@
                 shot(element, bombTank, destinyElement, countLifeTank, "LEFT");
             }
         }
-
     }
     //------------------------------------------------------------------------------------------------------//
     //EJECUTAR DISPARO DEPENDIENDO DE LA CANTIDAD DE VIDA, Y LA DIRECCIÓN DEL DISPARO.
     function shotTank1(element, bombTank, destinyElement, countTank, moveShot) {
-        //console.log("CONT TANK" + element.element + " " + countTank);
         if (moveShot == "DOWN") {
             //console.log("ELEMENT " + element.element);
             directionShotTank1 = "DOWN";
@@ -516,43 +503,50 @@
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN QUE PERMITE CHECKEAR SI COLISIONÓ EL OBJETO DE DESTINO. SI ES CIERTO DETIENE EL JUEGO.
     function checkCollisionTank1(element, bombTank, destinyElement, countTank) {
-        //console.log("ChCt1 BOMB TANK" + bombTank.element + " DESTINY " + destinyElement.element);
         //TODO: DESCOMENTAR LOS LOG'S METHOD. //postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
         if (intersects(bombTank, destinyElement)) {
+            var log = "";
             if (countLivesTank2 == 3) {
-                //console.log("COUNT LT2 = " + countLivesTank2);
                 postlivesOfTank2(3, 100); //ACTUALIZARÁ EN EL BACK-END A VIDA 2 CON 100%
                 getLivesOfTank2();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [2]-[100%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
+                log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [2]-[100%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                console.log(log);
+                postLog(log);
             } else if (countLivesTank2 == 2 && percentageLifeTank2 == 100) {
                 postlivesOfTank2(2, 50); //ACTUALIZA A VIDA 2 DE 100% A 50 DE %.
                 getLivesOfTank2();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [2]-[50%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
+                log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [2]-[50%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                console.log(log);
+                postLog(log);
             } else if (countLivesTank2 == 2 && percentageLifeTank2 == 50) {
                 postlivesOfTank2(1, 100); //ACTUALIZA A VIDA 1-100% DE VIDA 2 - 50%.
                 getLivesOfTank2();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [1]-[100%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
+                log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [1]-[100%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                console.log(log);
+                postLog(log);
             } else if (countLivesTank2 == 1 && percentageLifeTank2 != 0) {
                 //DESPUES DE 50 EVENTOS, SE LE RESTA EL 25% DE VIDA AL TANK.
                 if (countLowCaliberTank2 < 2) {
                     countLowCaliberTank2 += 1;
                     console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-                    console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
-                }
-                if (countLowCaliberTank2 == 2) {
-                    percentageLifeTank2 -= 25; //SE RESTA 25% A LA VIDA.
-                    postlivesOfTank2(1, percentageLifeTank2); //ACTUALIZA LA VIDA 1 Y RESTA 25%
-                    console.log("VIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
-
-                    countLowCaliberTank2 = 0; //SE REINICIA A 0.
-                    if (percentageLifeTank1 == 0) {
-                        stop = true;
+                    log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                    console.log(log);
+                    postLog(log);
+                    if (countLowCaliberTank2 == 2) {
+                        countLowCaliberTank2 = 0; //SE REINICIA A 0.
+                        percentageLifeTank2 -= 25; //SE RESTA 25% A LA VIDA.
+                        postlivesOfTank2(1, percentageLifeTank2); //ACTUALIZA LA VIDA 1 Y RESTA 25%
+                        log = "VIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                        console.log(log);
+                        postLog(log);
+                        if (percentageLifeTank1 == 0) { //PERMITE SABER SI LA VIDA 1 DEL % ES IGUAL A 0 PARA DETENER EL JUEGO.
+                            stop = true;
+                        }
                     }
                 }
-
             } else if (countLivesTank2 == 1 && percentageLifeTank2 == 0) {
                 postlivesOfTank2(0);
                 console.log("TERMINÓ EL JUEGO");
@@ -566,60 +560,66 @@
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN QUE PERMITE CHECKEAR SI COLISIONÓ EL OBJETO DE DESTINO. SI ES CIERTO DETIENE EL JUEGO.
     function checkCollisionTank2(element, bombTank, destinyElement, countTank) {
-        //TODO: AGREGAR VARIABLE DE TIPO DE DAÑO PARA BAJAR EN EL JSON Y SEGUIR EL JUEGO. VALIDAMOS SI EL ADVERSARIO TIENE 3 VIDAS ENTONCES LE QUITAREMOS EL 100% DE ESA VIDA. SI TIENE 2, LE QUITAREMOS EL 50% CON CALIBRE MEDIO. SI TIENE 1 LE QUITAREMOS 25%.
+        //TODO: AGREGAR VARIABLE DE TIPO DE DAÑO PARA BAJAR EN EL JSON Y SEGUIR EL JUEGO.
         //TODO: DESCOMENTAR LOS LOG'S METHOD. //postLog("GANO = " + "[" + element.element + "]" + " PERDIO = [" + destinyElement.element + "]");
+        //VALIDAMOS SI EL ADVERSARIO TIENE 3 VIDAS ENTONCES LE QUITAREMOS EL 100% DE ESA VIDA. SI TIENE 2, LE QUITAREMOS EL 50% CON CALIBRE MEDIO. SI TIENE 1 LE QUITAREMOS 25%.
         if (intersects(bombTank, destinyElement)) {
+            var log = "";
             if (countLivesTank1 == 3) {
-                //console.log("COUNT LT1 = " + countLivesTank1);
                 postlivesOfTank1(3, 100); //ACTUALIZARÁ EN EL BACK-END A VIDA 2 CON 100%
                 getLivesOfTank1();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [2]-[100%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentage_life1_tank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
+                log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [2]-[100%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentage_life1_tank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                console.log(log);
+                postLog(log); //ENVIAR POST AL SERVER DEL LOG.
             } else if (countLivesTank1 == 2 && percentageLifeTank1 == 100) {
                 postlivesOfTank1(2, 50); //ACTUALIZA A VIDA 2 DE 100% A 50 DE %.
                 getLivesOfTank1();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [2]-[50%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
+                log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [2]-[50%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                console.log(log);
+                postLog(log); //ENVIAR POST AL SERVER DEL LOG.
             } else if (countLivesTank1 == 2 && percentageLifeTank1 == 50) {
                 postlivesOfTank1(1, 100); //ACTUALIZA A VIDA 2 DE 50% A VIDA 1 CON 100%.
                 getLivesOfTank1();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-                console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [1]-[100%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
-
+                log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [1]-[100%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                console.log(log);
+                postLog(log); //ENVIAR POST AL SERVER DEL LOG.
             } else if (countLivesTank1 == 1 && percentageLifeTank1 != 0) {
                 //DESPUES DE 50 EVENTOS, SE LE RESTA EL 25% DE VIDA AL TANK.
                 if (countLowCaliberTank1 < 2) {
                     countLowCaliberTank1 += 1;
                     console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
-                    console.log("DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
-                }
-                if (countLowCaliberTank1 == 2) {
-                    percentageLifeTank1 -= 25; //SE RESTA 25% A LA VIDA.
-                    postlivesOfTank1(1, percentageLifeTank1); //ACTUALIZA LA VIDA 1 Y RESTA 25%
-                    console.log("VIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]");
-
-                    countLowCaliberTank1 = 0; //SE REINICIA A 0.
-                    if (percentageLifeTank1 == 0) {
-                        stop = true;
+                    log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                    console.log(log);
+                    postLog(log);
+                    if (countLowCaliberTank1 == 2) {
+                        countLowCaliberTank1 = 0; //SE REINICIA A 0.
+                        percentageLifeTank1 -= 25; //SE RESTA 25% A LA VIDA.
+                        postlivesOfTank1(1, percentageLifeTank1); //ACTUALIZA LA VIDA 1 Y RESTA 25%
+                        log = "VIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                        console.log(log);
+                        postLog(log);
+                        if (percentageLifeTank1 == 0) { //PERMITE SABER SI LA VIDA 1 DEL % ES IGUAL A 0 PARA DETENER EL JUEGO.
+                            stop = true;
+                        }
                     }
-                } else {
-                    console.log("NO ENTRO " + countLowCaliberTank1 + " % LIFE T1 " + percentageLifeTank1);
                 }
             } else if (countLivesTank1 == 1 && percentageLifeTank1 == 0) {
                 postlivesOfTank1(0);
                 console.log("TERMINÓ EL JUEGO");
                 stop = true;
             }
-        } else {
-            //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
+        } else { //console.log("A.X [" + bombTank.x + "] < B.X [" + destinyElement.x + "] + B.W [" + destinyElement.w + "]" + " && A.X [" + bombTank.x + "] + A.W [" + bombTank.w + "] > B.X [" + destinyElement.x + "] && A.Y [" + bombTank.y + "] < B.Y [" + destinyElement.y + "]" + " + B.H " + destinyElement.h + "] &&  A.Y [" + bombTank.y + "] + A.H [" + bombTank.h + "] > B.Y [" + destinyElement.y + "]");
         }
     }
 
 
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN QUE PERMITE INTERSECTAR DOS OBJETOS MEDIANTE TRUE O FALSE EN SU POSICIÓN Y MEDIDA.
-    function intersects(a, b) {
-        return a.x <= b.x + b.w && a.x + a.w >= b.x && a.y <= b.y + b.h && a.y + a.h >= b.y;
+    function intersects(bomb, destiny) {
+        return bomb.x <= destiny.x + destiny.w && bomb.x + bomb.w >= destiny.x && bomb.y <= destiny.y + destiny.h && bomb.y + bomb.h >= destiny.y;
     }
 
     //-----------------------------------------------------------------------------------------------x-------//
@@ -627,26 +627,20 @@
     function decideDirectionShotTank1() { //
         if (countLivesTank1 != 0) {
             if (directionShotTank1 == "UP") {
-                //console.log("ESTA EN SHOOTING IT UP\tGRACAS MI SEÑOR!");
-                bombTank1.y -= 40;
+                bombTank1.y -= 42;
             } else if (directionShotTank1 == "DOWN") {
-                //console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
-                bombTank1.y += 40;
+                bombTank1.y += 42;
             }
         }
     }
     //-----------------------------------------------------------------------------------------------x-------//
     //FUNCIÓN DE DECIDIR LA DIRECCIÓN DEL DISPARO CON VARIABLE GLOBAL DIRECCIÓN SHOT TANK2 Y LA VELOCIDAD DE DISPARO.
     function decideDirectionShotTank2() { //
-        //   console.log(" count " + percentageLifeTank1);
         if (countLivesTank2 != 0) {
-            //console.log(" count " + percentageLifeTank2 + " dst2 " + directionShotTank2);
             if (directionShotTank2 == "UP") {
-                //console.log("ESTA EN SHOOTING IT UP\tGRACAS MI SEÑOR!");
-                bombTank2.y -= 40;
+                bombTank2.y -= 42;
             } else if (directionShotTank2 == "DOWN") {
-                //console.log("ESTA EN SHOOTING IT DOWN\tGRACAS MI SEÑOR!");
-                bombTank2.y += 40;
+                bombTank2.y += 42;
             }
         } else {
             console.log(" count " + percentageLifeTank1);
