@@ -96,17 +96,19 @@
     <div id="obstacle2"></div>
     <div id="obstacle3"></div>
     <a href="login.html"><button>Go To Login</button></a>
-    <!--    <div id="tank"></div>-->
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
     //------------------------------------------------------------------------------------------------------//
+    //BATTLE TANK BY RICARDO PÉREZ.
+
     //VARIABLES GLOBALES.
     var lastLoopRun = 0;
 
-
     var controller = new Object();
-
+    //PERMITIR ACTUALIZAR LA POSICIÓN X & Y DE T1 Y T2
+    var xPositionTank1 = "Waiting";
+    var yPositionTank1 = "Waiting";
     var xPositionTank2 = "Waiting";
     var yPositionTank2 = "Waiting";
     //CONTADOR DE VIDAS DEL TANK1 Y 2
@@ -118,15 +120,12 @@
     //VAR DE CALIBRES BAJO.
     var percentage_life1_tank1 = 100;
     var percentage_life1_tank2 = 100;
-
+    //VAR'S QUE PERMITIRÁN ACTUALIZAR LA INFO PARA ENVIAR AL SERVER.
     var postValueTank2InX = "";
     var postValueTank2InY = "";
-
     var postValueTank1InX = "";
     var postValueTank1InY = "";
 
-    var xPositionTank1 = "Waiting";
-    var yPositionTank1 = "Waiting";
 
     var typeShotTank1 = "0";
     var directionShotTank1 = "";
@@ -191,10 +190,6 @@
     //------------------------------------------------------------------------------------------------------//
     //POST Y GET DE LA POSICIÓN DEL TANK1 Y 2.
     function postPositionOfTanks() {
-        //console.log("postT2X = " + postValueTank2InX + " t2,x = " + tank2.x + " pvT2Y = " + postValueTank2InY + " t2.y " + tank2.y);
-        //console.log(lifeTank2);
-
-        //PENDIENTE DE UN POSIBLE BUG SI NO PUEDES HACER EL POST CUANDO INTERSECTE LA VIDA.
         if (postValueTank2InX != tank2.x || postValueTank2InY != tank2.y || postValueTank2InX == tank2.x || postValueTank2InY == tank2.y || postValueTank1InX != tank1.x || postValueTank1InY != tank1.y || postValueTank1InX == tank1.x || postValueTank1InY == tank1.x) {
             $.ajax({
                 type: "POST",
@@ -609,7 +604,7 @@
                         stop = true;
                     }
                 } else {
-                    console.log("NO ENTRO " + countLowCaliberTank1);
+                    console.log("NO ENTRO " + countLowCaliberTank1 + " % LIFE T1 " + percentageLifeTank1);
                 }
             } else if (countLivesTank1 == 1 && percentageLifeTank1 == 0) {
                 postlivesOfTank1(0);
