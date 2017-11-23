@@ -10,6 +10,7 @@
 
 <body>
     <h1>Basic Auth</h1>
+    <h2>GET REQUEST</h2>
     <form name="cookieform" id="login" method="get">
         <h3>Username</h3>
         <input type="text" name="username" id="username" class="text" />
@@ -17,6 +18,11 @@
         <h3>Password</h3>
         <input type="password" name="password" id="password" class="text" />
         <hr>
+        <input type="submit" name="sub" value="Submit" class="page" />
+    </form>
+    <h2>POST REQUEST</h2>
+    <form name="" id="ejemplo" method="get">
+        <input type="text" name="newUsername" id="newUsername" class="text" />
         <input type="submit" name="sub" value="Submit" class="page" />
     </form>
     <script>
@@ -31,6 +37,31 @@
                 type: "GET",
                 url: "http://192.168.0.15:5000/",
                 contentType: "application/json",
+                accepts: "application/json",
+                dataType: 'json',
+                beforeSend: function(req) {
+                    req.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
+                },
+                success: function(data) {
+                    alert('Thanks my God! ' + data);
+                },
+                fail: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+        $("#ejemplo").submit(function(event) {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var newUsername = $("#newUsername").val();
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "http://192.168.0.15:5000/",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    'username': newUsername
+                }, null, '\t'),
                 accepts: "application/json",
                 dataType: 'json',
                 beforeSend: function(req) {
