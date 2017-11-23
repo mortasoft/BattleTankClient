@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <title>F2</title>
+</head>
+
+<body>
+    <form name="cookieform" id="login" method="get">
+        <input type="text" name="username" id="username" class="text" />
+        <hr>
+        <input type="password" name="password" id="password" class="text" />
+        <hr>
+        <input type="submit" name="sub" value="Submit" class="page" />
+    </form>
+
+    <script>
+        var username = $("input#username").val();
+        var password = $("input#password").val();
+
+        function make_base_auth(user, password) {
+            var tok = user + ':' + password;
+            var hash = Base64.encode(tok);
+            return "Basic " + hash;
+        }
+        $.ajax({
+            type: "GET",
+            url: "http://192.168.0.15:5000/",
+            contentType: "application/json",
+            accepts: "application/json",
+            dataType: 'json',
+            beforeSend: function(req) {
+                req.setRequestHeader('Authorization', 'Basic ' + btoa('username:password'));
+            },
+            success: function(data) {
+                alert('Thanks my God!' + data);
+            }
+        });
+
+        //$('#formejemplo').on("submit", function(event) {
+
+        //});
+        //$(document).on('click', '.ejemplo', function () {
+        //  console.log("Listo, gracias a Dios");
+        //          $.ajax({
+        //              url: "fetch.php",
+        //              method: "POST",
+        //              data: {
+        //                  employee_id: employee_id
+        //              },
+        //              dataType: "json",
+        //              success: function (data) {
+        //                  $('#nombre').val(data.nombre);
+        //                  $('#descanso').val(data.descanso);
+        //                  $('#numero_series').val(data.numero_series);
+        //                  $('#numero_repeticiones').val(data.numero_repeticiones);
+        //                  $('#employee_id').val(data.id);
+        //                  $('#insert').val("Editar");
+        //                  $('#add_data_Modal').modal('show');
+        //              }
+        //          });
+        //});
+        /* $(document).ready(function() {
+             var nameValue = document.getElementById("uniqueID").value;
+             console.log(nameValue);
+
+         });*/
+        /*        $.ajax({
+                    type: "GET",
+                    url: "http://10.2.3.24:5000/",
+                    dataType: 'json',
+                    data: '{}',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('Authorization', make_base_auth(username, password));
+                    },
+                    success: function() {
+                        alert('Thanks for your comment!');
+                    }
+                }); */
+        /*        $.ajax({
+                    type: "GET",
+                    url: "http://10.2.3.24:5000/",
+                    contentType: "application/json",
+                    accepts: "application/json",
+                    cache: false,
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("Authorization",
+                            "Basic " + btoa(self.username + ":" + self.password));
+                    },
+                    success: function(data) {
+                        //   console.log("Posición del tank 2 actualizada");
+                    },
+                    error: function(jqXHR) {
+                        console.log("ajax error " + jqXHR.status);
+                    }
+                });*/
+    </script>
+</body>
+
+</html>
