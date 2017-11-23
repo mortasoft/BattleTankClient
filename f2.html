@@ -16,29 +16,43 @@
         <hr>
         <input type="submit" name="sub" value="Submit" class="page" />
     </form>
-
+    <div id="other">
+        Trigger the handler
+    </div>
+    <form id="target" action="destination.html">
+        <input type="text" value="Hello there">
+        <input type="submit" value="Go">
+    </form>
     <script>
-        var username = $("input#username").val();
-        var password = $("input#password").val();
+        $("#login").submit(function(event) {
+            //alert("Handler for .submit() called.");
+            var username = $("#username").val();
+            var password = $("#password").val();
+            //console.log(username);
+            //console.log(password);
+            event.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: "http://192.168.0.15:5000/",
+                contentType: "application/json",
+                accepts: "application/json",
+                dataType: 'json',
+                beforeSend: function(req) {
+                    req.setRequestHeader('Authorization', 'Basic ' + btoa(username  + ":" + password));
+                },
+                success: function(data) {
+                    alert('Thanks my God! ' + data);
+                }
+            });
+        });
+
 
         function make_base_auth(user, password) {
             var tok = user + ':' + password;
             var hash = Base64.encode(tok);
             return "Basic " + hash;
         }
-        $.ajax({
-            type: "GET",
-            url: "http://192.168.0.15:5000/",
-            contentType: "application/json",
-            accepts: "application/json",
-            dataType: 'json',
-            beforeSend: function(req) {
-                req.setRequestHeader('Authorization', 'Basic ' + btoa('username:password'));
-            },
-            success: function(data) {
-                alert('Thanks my God!' + data);
-            }
-        });
+
 
         //$('#formejemplo').on("submit", function(event) {
 
