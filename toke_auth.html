@@ -24,6 +24,7 @@
     <h2>POST REQUEST</h2>
     <form name="" id="ejemplo" method="get">
         <input type="text" name="newUsername" id="newUsername" class="text" />
+        <input type="text" name="newPassword" id="newPassword" class="text" />
         <input type="submit" name="sub" value="Submit" class="page" />
     </form>
     <script>
@@ -55,21 +56,20 @@
             var username = $("#username").val();
             var password = $("#password").val();
             var newUsername = $("#newUsername").val();
+            var newPassword = $("#newPassword").val();
             event.preventDefault();
             $.ajax({
                 type: "POST",
-                url: "http://192.168.0.15:5000/",
+                url: "http://192.168.0.15:5000/api/users",
                 contentType: "application/json",
                 data: JSON.stringify({
-                    'username': newUsername
+                    'username': newUsername,
+                    'password': newPassword
                 }, null, '\t'),
                 accepts: "application/json",
                 dataType: 'json',
-                beforeSend: function(req) {
-                    req.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
-                },
                 success: function(data) {
-                    alert('Thanks my God! ' + data);
+                    alert('Thanks my God! ' + data.username);
                 },
                 fail: function(data) {
                     console.log(data);
