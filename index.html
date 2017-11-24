@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>BattleTank</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <h4>Battle Tank by Ricardo Pérez</h4>
+                <div class="flip">
+                    <div class="card">
+                        <div class="face front">
+                            <div class="panel panel-default">
+                                <form class="form-horizontal">
+                                    <br>
+                                    <h1 class="text-center">LOGO</h1>
+                                    <br>
+                                    <input class="form-control" placeholder="Username" />
+                                    <input class="form-control" placeholder="Password" />
+                                    <p class="text-right"><a href="">Forgot Password</a></p>
+                                    <button class="btn btn-primary btn-block">LOG IN</button>
+                                    <hr>
+                                    <p class="blue">Sign in with</p>
+                                    <p><i class="fa fa-facebook-f fa-lg"></i><i class="fa fa-twitter fa-lg"></i></p>
+                                    <hr>
+                                    <p class="text-center">
+                                        <a href="#" class="fliper-btn">Create new account?</a>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="face back">
+                            <div class="panel panel-default">
+                                <form class="form-horizontal">
+                                    <br>
+                                    <h1 class="text-center">LOGO</h1>
+                                    <br>
+                                    <label>Basic Information</label>
+                                    <input class="form-control" placeholder="Fullname" />
+                                    <input class="form-control" placeholder="Email" />
+                                    <label>Private Information</label>
+                                    <input class="form-control" placeholder="Password" />
+                                    <input class="form-control" placeholder="Mobile Number" />
+                                    <button class="btn btn-primary btn-block">SIGN UP</button>
+                                    <p class="text-center">
+                                        <a href="#" class="fliper-btn">Already have an account?</a>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+    <!-- /.container -->
+</body>
+<script>
+    $('.fliper-btn').click(function() {
+        $('.flip').find('.card').toggleClass('flipped');
+
+    });
+
+</script>
