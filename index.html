@@ -96,7 +96,10 @@
                 accepts: "application/json",
                 dataType: 'json',
                 success: function(data) {
-                    alert('Thanks my God! ' + data.username);
+                    $("#signUp")[0].reset();
+                    alert('Registered user! Hi ' + data.username + '!');
+                    $("newUsername").val("");
+                    $("newPassword").val("");
                 },
                 fail: function(data) {
                     console.log(data);
