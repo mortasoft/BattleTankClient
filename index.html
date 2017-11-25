@@ -13,12 +13,15 @@
         body {
             font-family: 'Josefin Sans', sans-serif;
         }
+
         .form-horizontal {
             background-color: #41d97c;
         }
+
         .row {
             background-color: #63ffbc;
         }
+
     </style>
     <title>BattleTank</title>
 </head>
@@ -35,33 +38,35 @@
                                 <div class="row">
                                     <h3 class="text-center">Battle Tank by Ricardo Pérez</h3>
                                     <div class="col-md-6 formColor">
-                                        <form class="form-horizontal formColor">
+                                        <form class="form-horizontal" id="signUp">
                                             <hr>
-                                            <h4 class="text-center" id="signUp">Sign Up</h4>
+                                            <h4 class="text-center">Sign Up</h4>
                                             <h5>Username</h5>
-                                            <input class="form-control" placeholder="Username" />
+                                            <input class="form-control" placeholder="Username" id="newUsername" />
                                             <h5>Password</h5>
-                                            <input class="form-control" placeholder="Password" />
-                                            <button class="btn btn-primary btn-block">SIGN UP</button>
+                                            <input class="form-control" placeholder="Password" id="newPassword" />
+                                            <input type="submit" name="sub" value="SIGN UP" class="btn btn-primary btn-block" />
                                         </form>
                                     </div>
                                     <div class="col-md-6">
-                                        <form class="form-horizontal">
+                                        <form class="form-horizontal" id="signIn">
                                             <hr>
                                             <h4 class="text-center">Sign In</h4>
-                                            <input class="form-control" placeholder="Username" />
-                                            <input class="form-control" placeholder="Password" />
-                                            <button class="btn btn-primary btn-block">LOG IN</button>
-                                            <br>
+                                            <input class="form-control" placeholder="Username" id="username" />
+                                            <input class="form-control" placeholder="Password" id="password" />
+                                            <input type="submit" name="sub" value="LOG IN" class="btn btn-primary btn-block" />
+                                        </form>
+                                        <form class="form-horizontal" id="signToken">
+                                            <hr>
                                             <h4 class="text-center">Sign in with Token</h4>
-                                            <input class="form-control" placeholder="TOKEN" />
-                                            <button class="btn btn-primary btn-block">TOKEN</button>
-                                            <br>
-                                            <p class="blue">Sign in with</p>
+                                            <input class="form-control" placeholder="TOKEN" id="token" />
+                                            <input type="submit" name="sub" value="TOKEN" class="btn btn-primary btn-block" />
+                                        </form>
+                                        <form class="form-horizontal" id="signWithSocialNetworks">
+                                            <hr>
+                                            <h4 class="text-center">Sign in with </h4>
                                             <p><i class="fa fa-facebook-f fa-lg"></i><i class="fa fa-twitter fa-lg"></i></p>
                                             <hr>
-                                            <p class="text-center">
-                                            </p>
                                         </form>
                                     </div>
                                 </div>
