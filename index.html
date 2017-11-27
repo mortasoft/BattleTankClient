@@ -22,6 +22,7 @@
         .row {
             background-color: #63ffbc;
         }
+
     </style>
     <title>BattleTank</title>
 </head>
@@ -55,6 +56,13 @@
                                         </form>
                                     </div>
                                     <div class="col-md-6">
+                                        <form class="form-horizontal" id="getToken">
+                                            <hr>
+                                            <h4 class="text-center">Get Token</h4>
+                                            <input class="form-control" placeholder="Username" id="tokenUsername" />
+                                            <input class="form-control" placeholder="Password" id="tokenPassword" />
+                                            <input type="submit" name="sub" value="GET TOKEN" class="btn btn-primary btn-block" />
+                                        </form>
                                         <form class="form-horizontal" id="signToken">
                                             <hr>
                                             <h4 class="text-center">Sign in with Token</h4>
@@ -126,6 +134,36 @@
                 success: function(data) {
                     $("#signIn")[0].reset();
                     alert(data.data);
+                },
+                error: function(jqXHR, textStatus) {
+                    console.log("ERROR = " + jqXHR.status);
+                    $("#signIn")[0].reset();
+                }
+            });
+        });
+
+    </script>
+    <script>
+        $("#getToken").submit(function(event) {
+            //alert("Handler for .submit() called.");
+            var username = $("#tokenUsername").val();
+            var password = $("#tokenPassword").val();
+            //console.log(username);
+            //console.log(password);
+            event.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: "http://192.168.0.15:5000/api/token",
+                contentType: "application/json",
+                accepts: "application/json",
+                dataType: 'json',
+                beforeSend: function(req) {
+                    req.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
+                },
+                success: function(data) {
+                    $("#signIn")[0].reset();
+                    alert(data.token);
+                    console.log(data.token);
                 },
                 error: function(jqXHR, textStatus) {
                     console.log("ERROR = " + jqXHR.status);
