@@ -22,7 +22,6 @@
         .row {
             background-color: #63ffbc;
         }
-
     </style>
     <title>BattleTank</title>
 </head>
@@ -98,11 +97,39 @@
                 success: function(data) {
                     $("#signUp")[0].reset();
                     alert('Registered user! Hi ' + data.username + '!');
-                    $("newUsername").val("");
-                    $("newPassword").val("");
                 },
-                fail: function(data) {
-                    console.log(data);
+                error: function(jqXHR, textStatus) {
+                    console.log("ERROR = " + jqXHR.status);
+                    $("#signUp")[0].reset();
+                }
+            });
+        });
+
+    </script>
+    <script>
+        $("#signIn").submit(function(event) {
+            //alert("Handler for .submit() called.");
+            var username = $("#username").val();
+            var password = $("#password").val();
+            //console.log(username);
+            //console.log(password);
+            event.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: "http://192.168.0.15:5000/api/resource",
+                contentType: "application/json",
+                accepts: "application/json",
+                dataType: 'json',
+                beforeSend: function(req) {
+                    req.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
+                },
+                success: function(data) {
+                    $("#signIn")[0].reset();
+                    alert(data.data);
+                },
+                error: function(jqXHR, textStatus) {
+                    console.log("ERROR = " + jqXHR.status);
+                    $("#signIn")[0].reset();
                 }
             });
         });
