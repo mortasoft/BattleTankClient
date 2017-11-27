@@ -161,13 +161,13 @@
                     req.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
                 },
                 success: function(data) {
-                    $("#signIn")[0].reset();
+                    $("#getToken")[0].reset();
                     alert(data.token);
                     console.log(data.token);
                 },
                 error: function(jqXHR, textStatus) {
                     console.log("ERROR = " + jqXHR.status);
-                    $("#signIn")[0].reset();
+                    $("#getToken")[0].reset();
                 }
             });
         });
