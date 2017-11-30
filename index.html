@@ -73,6 +73,10 @@
                                         <form class="form-horizontal" id="signWithSocialNetworks">
                                             <hr>
                                             <h4 class="text-center">Sign in with </h4>
+                                            <div id="fb-root"></div>
+                                            <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+                                            <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+                                            </fb:login-button>
                                             <p><i class="fa fa-facebook-f fa-lg"></i><i class="fa fa-twitter fa-lg"></i></p>
                                             <hr>
                                         </form>
@@ -87,114 +91,54 @@
         </div>
     </div>
     <!-- /.container -->
+    <script src="js/signUp.js"></script>
+    <script src="js/signIn.js"></script>
+    <script src="js/getToken.js"></script>
+    <script src="js/signToken.js"></script>
     <script>
-        $("#signUp").submit(function(event) {
-            var newUsername = $("#newUsername").val();
-            var newPassword = $("#newPassword").val();
-            event.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: "http://192.168.0.15:5000/api/users",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    'username': newUsername,
-                    'password': newPassword
-                }, null, '\t'),
-                accepts: "application/json",
-                dataType: 'json',
-                success: function(data) {
-                    $("#signUp")[0].reset();
-                    alert('Registered user! Hi ' + data.username + '!');
-                },
-                error: function(jqXHR, textStatus) {
-                    console.log("ERROR = " + jqXHR.status);
-                    $("#signUp")[0].reset();
-                }
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '292343824503414',
+                cookie: true,
+                xfbml: true,
+                version: 'v2.11'
             });
+
+            FB.AppEvents.logPageView();
+
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
         });
+
+        function checkLoginState() {
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+        }
 
     </script>
     <script>
-        $("#signIn").submit(function(event) {
-            //alert("Handler for .submit() called.");
-            var username = $("#username").val();
-            var password = $("#password").val();
-            //console.log(username);
-            //console.log(password);
-            event.preventDefault();
-            $.ajax({
-                type: "GET",
-                url: "http://192.168.0.15:5000/api/resource",
-                contentType: "application/json",
-                accepts: "application/json",
-                dataType: 'json',
-                beforeSend: function(req) {
-                    req.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
-                },
-                success: function(data) {
-                    $("#signIn")[0].reset();
-                    alert(data.data);
-                },
-                error: function(jqXHR, textStatus) {
-                    console.log("ERROR = " + jqXHR.status);
-                    $("#signIn")[0].reset();
-                }
-            });
-        });
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = 'https://connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.11&appId=292343824503414';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
 
-    </script>
-    <script>
-        $("#getToken").submit(function(event) {
-            //alert("Handler for .submit() called.");
-            var username = $("#tokenUsername").val();
-            var password = $("#tokenPassword").val();
-            //console.log(username);
-            //console.log(password);
-            event.preventDefault();
-            $.ajax({
-                type: "GET",
-                url: "http://192.168.0.15:5000/api/token",
-                contentType: "application/json",
-                accepts: "application/json",
-                dataType: 'json',
-                beforeSend: function(req) {
-                    req.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
-                },
-                success: function(data) {
-                    $("#getToken")[0].reset();
-                    alert(data.token);
-                    console.log(data.token);
-                },
-                error: function(jqXHR, textStatus) {
-                    console.log("ERROR = " + jqXHR.status);
-                    $("#getToken")[0].reset();
-                }
-            });
-        });
-    </script>
-    <script>
-        $("#signToken").submit(function(event) {
-            var username = $("#token").val();
-            //console.log(username);
-            event.preventDefault();
-            $.ajax({
-                type: "GET",
-                url: "http://192.168.0.15:5000/api/resource",
-                contentType: "application/json",
-                accepts: "application/json",
-                dataType: 'json',
-                beforeSend: function(req) {
-                    req.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + "whatever"));
-                },
-                success: function(data) {
-                    $("#signToken")[0].reset();
-                    alert(data.data);
-                },
-                error: function(jqXHR, textStatus) {
-                    console.log("ERROR = " + jqXHR.status);
-                    $("#signToken")[0].reset();
-                }
-            });
-        });
     </script>
 </body>
