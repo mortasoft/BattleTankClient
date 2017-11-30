@@ -73,11 +73,11 @@
                                         <form class="form-horizontal" id="signWithSocialNetworks">
                                             <hr>
                                             <h4 class="text-center">Sign in with </h4>
-                                            <div id="fb-root"></div>
-                                            <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+                                            <!-- <div id="fb-root"></div>
+                                            <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>-->
                                             <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
                                             </fb:login-button>
-                                            <p><i class="fa fa-facebook-f fa-lg"></i><i class="fa fa-twitter fa-lg"></i></p>
+
                                             <hr>
                                         </form>
                                     </div>
@@ -104,7 +104,9 @@
                 version: 'v2.11'
             });
 
-            FB.AppEvents.logPageView();
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
 
         };
 
@@ -119,9 +121,13 @@
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
 
-        FB.getLoginStatus(function(response) {
-            statusChangeCallback(response);
-        });
+        function statusChangeCallback(response) {
+            if (response.status === "conected") {
+                console.log("Logged in and authenticated.");
+            } else {
+                console.log("Not authenticated.");
+            }
+        }
 
         function checkLoginState() {
             FB.getLoginStatus(function(response) {
