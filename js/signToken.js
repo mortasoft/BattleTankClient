@@ -14,6 +14,7 @@
          success: function (data) {
              $("#signToken")[0].reset();
              alert(data.data);
+             location.href = "shooting.html";
          },
          error: function (jqXHR, textStatus) {
              console.log("ERROR = " + jqXHR.status);
