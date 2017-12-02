@@ -1,0 +1,98 @@
+ body {
+     background-repeat: no-repeat;
+     background-position: right top;
+     margin-right: 200px;
+     background-attachment: fixed;
+ }
+
+ #color {
+     background: #8583de;
+     width: 400px;
+     height: 400px;
+     position: absolute;
+ }
+
+ #tank1 {
+     background: #8583de;
+     width: 40px;
+     height: 40px;
+     position: absolute;
+     content: url(https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=0ahUKEwjZpJPKgcXXAhWG2yYKHTiFCugQjBwIBA&url=https%3A%2F%2Fpng.pngtree.com%2Felement_pic%2F00%2F16%2F07%2F21579071db4cb72.jpg&psig=AOvVaw2ELxsXFA-7rXLoiuJtK2C7&ust=1510987580076341);
+ }
+
+ #tank2 {
+     background: #A3C9de;
+     width: 40px;
+     height: 40px;
+     position: absolute;
+ }
+
+ #background {
+     background: #E00001;
+     position: absolute;
+     width: 460px;
+     height: 460px;
+     left: 0px;
+     top: 0px;
+     border-style: solid;
+     border-color: black;
+     border-width: 20px;
+ }
+
+ #bombTank1 {
+     background: #F7FF00;
+     width: 10px;
+     height: 10px;
+     position: absolute;
+ }
+
+ #bombTank2 {
+     background: #0CA65B;
+     width: 10px;
+     height: 10px;
+     position: absolute;
+ }
+
+ #obstacle1 {
+     background: #8ECBA2;
+     width: 80px;
+     height: 40px;
+     position: absolute;
+ }
+
+ #obstacle2 {
+     background: #8ECBA2;
+     width: 80px;
+     height: 40px;
+     position: absolute;
+ }
+
+ #obstacle3 {
+     background: #8ECBA2;
+     width: 80px;
+     height: 40px;
+     position: absolute;
+ }
+
+ #board {
+     background: #8ECBA2;
+     width: 400px;
+     height: 400px;
+     position: absolute;
+     margin-left: 550px;
+     margin-top: 10px;
+     border-bottom-left-radius: 10px;
+     border-bottom-right-radius: 10px;
+     border-top-left-radius: 10px;
+     border-top-right-radius: 10px;
+     background: rgb(122, 188, 255);
+     background: -moz-linear-gradient(top, rgba(122, 188, 255, 1) 0%, rgba(96, 171, 248, 1) 23%, rgba(145, 44, 165, 1) 100%, rgba(145, 44, 165, 1) 100%);
+     background: -webkit-linear-gradient(top, rgba(122, 188, 255, 1) 0%, rgba(96, 171, 248, 1) 23%, rgba(145, 44, 165, 1) 100%, rgba(145, 44, 165, 1) 100%);
+     background: linear-gradient(to bottom, rgba(122, 188, 255, 1) 0%, rgba(96, 171, 248, 1) 23%, rgba(145, 44, 165, 1) 100%, rgba(145, 44, 165, 1) 100%);
+     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7abcff', endColorstr='#912ca5', GradientType=0);
+ }
+
+ body {
+     font-family: 'Josefin Sans', sans-serif;
+     text-align-last: center;
+ }
