@@ -14,15 +14,20 @@
  }
 
  #tank1 {
-     background: #8583de;
+     background: #101640;
      width: 40px;
      height: 40px;
      position: absolute;
      content: url(https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=0ahUKEwjZpJPKgcXXAhWG2yYKHTiFCugQjBwIBA&url=https%3A%2F%2Fpng.pngtree.com%2Felement_pic%2F00%2F16%2F07%2F21579071db4cb72.jpg&psig=AOvVaw2ELxsXFA-7rXLoiuJtK2C7&ust=1510987580076341);
  }
 
+ #t1 {
+     text-align: center;
+     color: white;
+ }
+
  #tank2 {
-     background: #A3C9de;
+     background: #3174a8;
      width: 40px;
      height: 40px;
      position: absolute;
@@ -38,10 +43,21 @@
      border-style: solid;
      border-color: black;
      border-width: 20px;
+     background: rgba(231, 56, 39, 1);
+     background: -moz-linear-gradient(left, rgba(231, 56, 39, 1) 0%, rgba(231, 56, 39, 1) 1%, rgba(240, 47, 23, 1) 19%, rgba(248, 80, 50, 1) 47%, rgba(246, 41, 12, 1) 76%, rgba(231, 56, 39, 1) 93%, rgba(231, 56, 39, 1) 100%);
+     background: -webkit-gradient(left top, right top, color-stop(0%, rgba(231, 56, 39, 1)), color-stop(1%, rgba(231, 56, 39, 1)), color-stop(19%, rgba(240, 47, 23, 1)), color-stop(47%, rgba(248, 80, 50, 1)), color-stop(76%, rgba(246, 41, 12, 1)), color-stop(93%, rgba(231, 56, 39, 1)), color-stop(100%, rgba(231, 56, 39, 1)));
+     background: -webkit-linear-gradient(left, rgba(231, 56, 39, 1) 0%, rgba(231, 56, 39, 1) 1%, rgba(240, 47, 23, 1) 19%, rgba(248, 80, 50, 1) 47%, rgba(246, 41, 12, 1) 76%, rgba(231, 56, 39, 1) 93%, rgba(231, 56, 39, 1) 100%);
+     background: -o-linear-gradient(left, rgba(231, 56, 39, 1) 0%, rgba(231, 56, 39, 1) 1%, rgba(240, 47, 23, 1) 19%, rgba(248, 80, 50, 1) 47%, rgba(246, 41, 12, 1) 76%, rgba(231, 56, 39, 1) 93%, rgba(231, 56, 39, 1) 100%);
+     background: -ms-linear-gradient(left, rgba(231, 56, 39, 1) 0%, rgba(231, 56, 39, 1) 1%, rgba(240, 47, 23, 1) 19%, rgba(248, 80, 50, 1) 47%, rgba(246, 41, 12, 1) 76%, rgba(231, 56, 39, 1) 93%, rgba(231, 56, 39, 1) 100%);
+     background: linear-gradient(to right, rgba(231, 56, 39, 1) 0%, rgba(231, 56, 39, 1) 1%, rgba(240, 47, 23, 1) 19%, rgba(248, 80, 50, 1) 47%, rgba(246, 41, 12, 1) 76%, rgba(231, 56, 39, 1) 93%, rgba(231, 56, 39, 1) 100%);
+     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e73827', endColorstr='#e73827', GradientType=1);
+     -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+     -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+     box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
  }
 
  #bombTank1 {
-     background: #F7FF00;
+     background: #d9ff00;
      width: 10px;
      height: 10px;
      position: absolute;
@@ -52,7 +68,7 @@
  }
 
  #bombTank2 {
-     background: #0CA65B;
+     background: #FFFFFF;
      width: 10px;
      height: 10px;
      position: absolute;
@@ -67,6 +83,10 @@
      width: 80px;
      height: 40px;
      position: absolute;
+
+     -webkit-box-shadow: 9px 9px 9px -6px rgba(0, 0, 0, 0.75);
+     -moz-box-shadow: 9px 9px 9px -6px rgba(0, 0, 0, 0.75);
+     box-shadow: 9px 9px 9px -6px rgba(0, 0, 0, 0.75);
  }
 
  #obstacle2 {
@@ -74,6 +94,9 @@
      width: 80px;
      height: 40px;
      position: absolute;
+     -webkit-box-shadow: 9px 9px 9px -6px rgba(0, 0, 0, 0.75);
+     -moz-box-shadow: 9px 9px 9px -6px rgba(0, 0, 0, 0.75);
+     box-shadow: 9px 9px 9px -6px rgba(0, 0, 0, 0.75);
  }
 
  #obstacle3 {
@@ -81,6 +104,9 @@
      width: 80px;
      height: 40px;
      position: absolute;
+     -webkit-box-shadow: 9px 9px 9px -6px rgba(0, 0, 0, 0.75);
+     -moz-box-shadow: 9px 9px 9px -6px rgba(0, 0, 0, 0.75);
+     box-shadow: 9px 9px 9px -6px rgba(0, 0, 0, 0.75);
  }
 
  #board {
