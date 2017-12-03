@@ -28,12 +28,18 @@
         </div>
         <div>
             <img id="heart" src="/img/Heart.png" alt="">
+            <h1 id="livesOfTank1">3</h1>
+            <h1 id="livesOfTank2">3</h1>
         </div>
         <div>
             <img id="percentage" src="/img/%25.png" alt="">
+            <h1 id="PorcOfTank1">100%</h1>
+            <h1 id="PorcOfTank2">100%</h1>
         </div>
         <div>
             <img id="lowCaliber" src="/img/lc.png" alt="">
+            <h1 id="CountOfTank1">0</h1>
+            <h1 id="CountOfTank2">0</h1>
         </div>
     </div>
 </body>
@@ -449,6 +455,7 @@
             if (countLivesTank2 == 3) {
                 postlivesOfTank2(3, 100); //ACTUALIZARÁ EN EL BACK-END A VIDA 2 CON 100%
                 getLivesOfTank2();
+                setScore(countLivesTank1, 2, percentageLifeTank1, 100, countLowCaliberTank1, countLowCaliberTank2);
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [2]-[100%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
                 console.log(log);
@@ -456,6 +463,7 @@
             } else if (countLivesTank2 == 2 && percentageLifeTank2 == 100) {
                 postlivesOfTank2(2, 50); //ACTUALIZA A VIDA 2 DE 100% A 50 DE %.
                 getLivesOfTank2();
+                setScore(countLivesTank1, 2, percentageLifeTank1, 50, countLowCaliberTank1, countLowCaliberTank2);
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [2]-[50%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
                 console.log(log);
@@ -465,6 +473,7 @@
                 getLivesOfTank2();
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [1]-[100%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                setScore(countLivesTank1, 1, percentageLifeTank1, 100, countLowCaliberTank1, countLowCaliberTank2);
                 console.log(log);
                 postLog(log);
             } else if (countLivesTank2 == 1 && percentageLifeTank2 != 0) {
@@ -473,6 +482,7 @@
                     countLowCaliberTank2 += 1;
                     console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                     log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                    setScore(countLivesTank1, countLivesTank2, percentageLifeTank1, percentageLifeTank2, countLowCaliberTank1, countLowCaliberTank2);
                     console.log(log);
                     postLog(log);
                     if (countLowCaliberTank2 == 50) {
@@ -480,6 +490,7 @@
                         percentageLifeTank2 -= 25; //SE RESTA 25% A LA VIDA.
                         postlivesOfTank2(1, percentageLifeTank2); //ACTUALIZA LA VIDA 1 Y RESTA 25%
                         log = "VIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
+                        setScore(countLivesTank1, countLivesTank2, percentageLifeTank1, percentageLifeTank2, countLowCaliberTank1, countLowCaliberTank2);
                         console.log(log);
                         postLog(log);
                         if (percentageLifeTank1 == 0) { //PERMITE SABER SI LA VIDA 1 DEL % ES IGUAL A 0 PARA DETENER EL JUEGO.
@@ -509,6 +520,7 @@
             if (countLivesTank1 == 3) {
                 postlivesOfTank1(3, 100); //ACTUALIZARÁ EN EL BACK-END A VIDA 2 CON 100%
                 getLivesOfTank1();
+                setScore(2, countLivesTank2, 100, percentageLifeTank2, countLowCaliberTank1, countLowCaliberTank2);
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [2]-[100%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
                 console.log(log);
@@ -516,6 +528,7 @@
             } else if (countLivesTank1 == 2 && percentageLifeTank1 == 100) {
                 postlivesOfTank1(2, 50); //ACTUALIZA A VIDA 2 DE 100% A 50 DE %.
                 getLivesOfTank1();
+                setScore(2, countLivesTank2, 50, percentageLifeTank2, countLowCaliberTank1, countLowCaliberTank2);
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [2]-[50%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
                 console.log(log);
@@ -523,6 +536,7 @@
             } else if (countLivesTank1 == 2 && percentageLifeTank1 == 50) {
                 postlivesOfTank1(1, 100); //ACTUALIZA A VIDA 2 DE 50% A VIDA 1 CON 100%.
                 getLivesOfTank1();
+                setScore(1, countLivesTank2, 100, percentageLifeTank2, countLowCaliberTank1, countLowCaliberTank2);
                 console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                 log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [1]-[100%] LOW CALIBER = [" + countLowCaliberTank1 + "]\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
                 console.log(log);
@@ -531,6 +545,7 @@
                 //DESPUES DE 50 EVENTOS, SE LE RESTA EL 25% DE VIDA AL TANK.
                 if (countLowCaliberTank1 < 50) {
                     countLowCaliberTank1 += 1;
+                    setScore(countLivesTank1, countLivesTank2, percentageLifeTank1, percentageLifeTank2, countLowCaliberTank1, countLowCaliberTank2);
                     console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                     log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
                     console.log(log);
@@ -539,6 +554,7 @@
                         countLowCaliberTank1 = 0; //SE REINICIA A 0.
                         percentageLifeTank1 -= 25; //SE RESTA 25% A LA VIDA.
                         postlivesOfTank1(1, percentageLifeTank1); //ACTUALIZA LA VIDA 1 Y RESTA 25%
+                        setScore(countLivesTank1, countLivesTank2, percentageLifeTank1, percentageLifeTank2, countLowCaliberTank1, countLowCaliberTank2);
                         log = "VIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
                         console.log(log);
                         postLog(log);
@@ -589,6 +605,16 @@
         } else {
             console.log(" count " + percentageLifeTank1);
         }
+    }
+
+    function setScore(lifeTank1, lifeTank2, percentageTank1, percentageTank2, countTank1, countTank2) {
+        console.log("LT1 = " + lifeTank1 + " LT2 = " + lifeTank2 + " %T1 " + percentageTank1 + " %T2 = " + percentageTank2 + " CT1 = " + countTank1 + " CT2 = " + countTank2);
+        $("#livesOfTank2").text(lifeTank2);
+        $("#livesOfTank1").text(lifeTank1);
+        $("#PorcOfTank1").text(percentageTank1);
+        $("#PorcOfTank2").text(percentageTank2);
+        $("#CountOfTank1").text(countTank1);
+        $("#CountOfTank2").text(countTank2);
     }
     //------------------------------------------------------------------------------------------------------//
     //FUNCIÓN PRINCIPAL DEL JUEGO QUE SE REPETIRÁ DEPENDIENDO DEL TIEMPO EN SETTIMEOUT CON CADA UNO DE LOS
