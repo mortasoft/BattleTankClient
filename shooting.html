@@ -27,17 +27,17 @@
             <h4>TANK2</h4>
         </div>
         <div>
-            <img id="heart" src="/img/Heart.png" alt="">
+            <img id="heart" src="../battletank/img/Heart.png" alt="">
             <h1 id="livesOfTank1">3</h1>
             <h1 id="livesOfTank2">3</h1>
         </div>
         <div>
-            <img id="percentage" src="/img/%25.png" alt="">
+            <img id="percentage" src="../battletank/img/%25.png" alt="">
             <h1 id="PorcOfTank1">100%</h1>
             <h1 id="PorcOfTank2">100%</h1>
         </div>
         <div>
-            <img id="lowCaliber" src="/img/lc.png" alt="">
+            <img id="lowCaliber" src="../battletank/img/lc.png" alt="">
             <h1 id="CountOfTank1">0</h1>
             <h1 id="CountOfTank2">0</h1>
         </div>
@@ -480,14 +480,14 @@
                 postLog(log);
             } else if (countLivesTank2 == 1 && percentageLifeTank2 != 0) {
                 //DESPUES DE 50 EVENTOS, SE LE RESTA EL 25% DE VIDA AL TANK.
-                if (countLowCaliberTank2 < 2) {
+                if (countLowCaliberTank2 < 50) {
                     countLowCaliberTank2 += 1;
                     console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                     log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
                     setScore(countLivesTank1, countLivesTank2, percentageLifeTank1, percentageLifeTank2, countLowCaliberTank1, countLowCaliberTank2);
                     console.log(log);
                     postLog(log);
-                    if (countLowCaliberTank2 == 2) {
+                    if (countLowCaliberTank2 == 50) {
                         countLowCaliberTank2 = 0; //SE REINICIA A 0.
                         percentageLifeTank2 -= 25; //SE RESTA 25% A LA VIDA.
                         postlivesOfTank2(1, percentageLifeTank2); //ACTUALIZA LA VIDA 1 Y RESTA 25%
@@ -545,14 +545,14 @@
                 postLog(log); //ENVIAR POST AL SERVER DEL LOG.
             } else if (countLivesTank1 == 1 && percentageLifeTank1 != 0) {
                 //DESPUES DE 50 EVENTOS, SE LE RESTA EL 25% DE VIDA AL TANK.
-                if (countLowCaliberTank1 < 2) {
+                if (countLowCaliberTank1 < 50) {
                     countLowCaliberTank1 += 1;
                     setScore(countLivesTank1, countLivesTank2, percentageLifeTank1, percentageLifeTank2, countLowCaliberTank1, countLowCaliberTank2);
                     console.log("DISPARO INTERSECTÓ A " + destinyElement.element);
                     log = "DISPARO = [" + element.element + "]\nRECIBIO EL DISPARO = [" + destinyElement.element + "]\nVIDAS TANK1 = [" + countLivesTank1 + "]-[" + percentageLifeTank1 + "%] LOW CALIBER = [" + countLowCaliberTank1 + "]" + "\nVIDAS TANK2 = [" + countLivesTank2 + "]-[" + percentageLifeTank2 + "%] LOW CALIBER = [" + countLowCaliberTank2 + "]";
                     console.log(log);
                     postLog(log);
-                    if (countLowCaliberTank1 == 2) {
+                    if (countLowCaliberTank1 == 50) {
                         countLowCaliberTank1 = 0; //SE REINICIA A 0.
                         percentageLifeTank1 -= 25; //SE RESTA 25% A LA VIDA.
                         postlivesOfTank1(1, percentageLifeTank1); //ACTUALIZA LA VIDA 1 Y RESTA 25%
