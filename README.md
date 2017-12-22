@@ -22,5 +22,5 @@ Javascript's applicattion made it with AngularJs and AJAX.
 ## Credits
 Firstly thanks to God for this experience developing this game. Also, thanks to my teacher for make me to grow up with this challenge.
 
-##Author
+## Author
 - Ricardo Pérez (<https://github.com/ricardoperezf>)
