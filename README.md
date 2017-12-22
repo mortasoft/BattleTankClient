@@ -11,3 +11,16 @@ Javascript's applicattion made it with AngularJs and AJAX.
 8. Go to line 244 of `Shooting.html`and change that ip to your ip's vm: `http:// [IP SERVER]:5000/api/v1/users/tank/logs`
 9. Go to line 257 of `Shooting.html`and change that ip to your ip's vm: `http:// [IP SERVER]:5000/api/v1/users/tank/logs`
 10. Go to line 244 of `Controller_logs.js`and change that ip to your ip's vm: `$http.get("http://[IP SERVER]:5000/api/v1/users/tank/logs")`
+
+## Contributing
+1. Fork it (<https://github.com/ricardoperezf/BattleTankClient>)
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request!!
+
+## Credits
+Firstly thanks to God for this experience developing this game. Also, thanks to my teacher for make me to grow up with this challenge.
+
+##Author
+- Ricardo Pérez (<https://github.com/ricardoperezf>)
